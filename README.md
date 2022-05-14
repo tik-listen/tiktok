@@ -6,12 +6,11 @@
 
 <!-- PROJECT SHIELDS -->
 
-[![Contributors][contributors-shield]][https://github.com/Mrxuexi/tiktok/graphs/contributors]
-[![Forks][forks-shield]][https://github.com/Mrxuexi/tiktok/network/members]
-[![Stargazers][stars-shield]][https://github.com/Mrxuexi/tiktok/stargazers]
-[![Issues][issues-shield]][https://github.com/Mrxuexi/tiktok/issues]
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][https://github.com/Mrxuexi/tiktok/blob/main/LICENSE.txt]
 
 <!-- PROJECT LOGO -->
 <br />
@@ -148,7 +147,7 @@ xxh@xxxx
 
 博客:[name](https://example.com)  &ensp; qq: 916516214    
 
- *往下由目前 7 人核心开发小组填写*
+ *剩余内容由目前 7 人核心开发小组填写*
 
 ### 版权说明
 
@@ -160,19 +159,19 @@ xxh@xxxx
 - [字节跳动后端青训营](https://youthcamp.bytedance.com/)
 
 <!-- links -->
-[your-project-path]:shaojintian/Best_README_template
-[contributors-shield]: https://img.shields.io/github/contributors/shaojintian/Best_README_template.svg?style=flat-square
-[contributors-url]: https://github.com/shaojintian/Best_README_template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/shaojintian/Best_README_template.svg?style=flat-square
-[forks-url]: https://github.com/shaojintian/Best_README_template/network/members
-[stars-shield]: https://img.shields.io/github/stars/shaojintian/Best_README_template.svg?style=flat-square
-[stars-url]: https://github.com/shaojintian/Best_README_template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/shaojintian/Best_README_template.svg?style=flat-square
-[issues-url]: https://img.shields.io/github/issues/shaojintian/Best_README_template.svg
-[license-shield]: https://img.shields.io/github/license/shaojintian/Best_README_template.svg?style=flat-square
-[license-url]: https://github.com/shaojintian/Best_README_template/blob/master/LICENSE.txt
+[your-project-path]:mrxuexi/tiktok
+[contributors-shield]: https://img.shields.io/github/contributors/mrxuexi/tiktok.svg?style=flat-square
+[contributors-url]: https://github.com/mrxuexi/tiktok/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/mrxuexi/tiktok.svg?style=flat-square
+[forks-url]: https://github.com/mrxuexi/tiktok/network/members
+[stars-shield]: https://img.shields.io/github/stars/mrxuexi/tiktok.svg?style=flat-square
+[stars-url]: https://github.com/mrxuexi/tiktok/stargazers
+[issues-shield]: https://img.shields.io/github/issues/mrxuexi/tiktoksvg?style=flat-square
+[issues-url]: https://img.shields.io/github/issues/mrxuexi/tiktok.svg
+[license-shield]: https://img.shields.io/github/license/mrxuexi/tiktok.svg?style=flat-square
+[license-url]: https://github.com/mrxuexi/tiktok/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/shaojintian
+[linkedin-url]: https://linkedin.com/in/xxxx
 
 
 
