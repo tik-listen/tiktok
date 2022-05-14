@@ -20,7 +20,7 @@
   </a>
   <h3 align="center">抖音 from 字节后端青训营</h3>
   <p align="center">
-    一个"完美的"README模板去快速开始你的项目！
+    基于云原生架构 ver 0.1
     <br />
     <a href="https://github.com/mrxuexi/tiktok"><strong>探索本项目的文档 »</strong></a>
     <br />
