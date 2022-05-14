@@ -19,7 +19,7 @@
   <a href="https://github.com/shaojintian/Best_README_template/">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
-  <h3 align="center">基于字节后端青训营的抖音项目</h3>
+  <h3 align="center">抖音 from 字节后端青训营</h3>
   <p align="center">
     一个"完美的"README模板去快速开始你的项目！
     <br />
