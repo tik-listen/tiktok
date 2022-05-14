@@ -2,7 +2,6 @@
 
 # tiktok
 
-基于字节后端青训营的抖音项目
 
 <!-- PROJECT SHIELDS -->
 
