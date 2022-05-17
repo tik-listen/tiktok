@@ -1,33 +1,33 @@
-import (
-	"fmt"
-	"log"
-	"time"
+package databases
 
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
+import (
+	"context"
+	"fmt"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"log"
+	"tiktok/conf"
 )
 
-var DB *gorm.DB
+var globalDB *gorm.DB
 
-func InitMySql(cfg *configs.MySQLConfig) (err error) {
-	connUrl := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		cfg.Username, cfg.Password, cfg.Host, cfg.Port, cfg.Db)
-	DB, err = gorm.Open("mysql", connUrl)
+func InitMysql(cfg *conf.MySQLConfig) error {
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
+		cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DB,
+	)
+	// TODO: need to log
+
+	db, err := gorm.Open(mysql.Open(dsn))
 	if err != nil {
-		log.Println(err)
-		return
+		// TODO: need to log
+		return err
 	}
+	globalDB = db
 
-	err = DB.DB().Ping()
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	if cfg.Debug {
-		DB = DB.Debug()
-	}
-	DB.DB().SetConnMaxLifetime(time.Minute * 10)
-	DB.SingularTable(true)
-	return
+	log.Print("db connected success")
+	return nil
+}
+func GetDB(ctx context.Context) *gorm.DB {
+	return globalDB.WithContext(ctx)
 }
