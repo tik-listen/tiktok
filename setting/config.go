@@ -1,4 +1,4 @@
-package conf
+package setting
 
 import (
 	"fmt"
@@ -49,7 +49,7 @@ type LogConfig struct {
 	MaxBackups int    `mapstructure:"max_backups"`
 }
 
-func Init() (err error) {
+func Init(filePath string) (err error) {
 
 	viper.SetConfigFile("config.yaml")
 	err = viper.ReadInConfig()
