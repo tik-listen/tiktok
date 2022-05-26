@@ -74,25 +74,34 @@ git clone https://github.com/Mrxuexi/tiktok.git
 ### 文件目录说明
 eg:
 
-```
+```shell
 filetree
+├─base（公共基础库，封装一些通用的逻辑）
+│  ├─logger（zap 日志）
+│  ├─middlewares（中间件）
+│  └─mykafka（封装 Kafka 操作）
+│  └─mymysql（封装 MySQL 公共 CRUD 操作）
+│  └─myredis（封装 Redis 公共操作）
+│  └─snowflake（分布式 id 生成器）
 ├─bff
-│  ├─firstpagebff
-│  ├─userbff
-│  └─vediobff
-├─deploy
-├─gateway
-├─images
-├─pkg
-│  ├─cache
-│  ├─databases
-│  └─mq
-└─service
-    ├─commentsrv
-    ├─favoritesrv
-    ├─publishsrv
-    ├─relationsrv
-    └─usersrv
+│  ├─accountbff（账号相关 BFF）
+│  ├─vediobff（视频相关 BFF）
+├─conf（viper 配置 yaml 模板文件）
+├─deploy（部署）
+├─design（设计文档）
+├─gateway（API 网关）
+│  ├─common
+│  ├─controller
+│  ├─io（请求和响应封装）
+│  ├─routers（路由）
+├─images 
+├─service（服务）
+│  ├─commentsrv
+│  ├─favoritesrv
+│  ├─publishsrv
+│  ├─relationsrv
+│  └─usersrv
+├─setting（viper 配置）
 ```
 
 
@@ -100,6 +109,8 @@ filetree
 
 
 ### 开发的架构 
+
+![tiktok 项目架构](design/tiktok 项目架构.png)
 
 请阅读[ARCHITECTURE.md](https://github.com/mrxuexi/tiktok/) 查阅为该项目的架构。
 
@@ -144,7 +155,7 @@ mdowellrlph@gmail.com
 
 xxh@xxxx
 
-博客:[name](https://example.com)  &ensp; qq: 916516214    
+博客:[name](https://example.com)  &ensp; qq: 212222222    
 
  *剩余内容由目前 7 人核心开发小组填写*
 
