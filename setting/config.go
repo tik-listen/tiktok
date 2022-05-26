@@ -52,7 +52,7 @@ type LogConfig struct {
 
 func Init(filePath string) (err error) {
 
-	viper.SetConfigFile("./xxxxx/config.yaml")
+	viper.SetConfigFile(filePath)
 	err = viper.ReadInConfig()
 	if err != nil {
 		fmt.Printf("viper.ReadInConfig failed, err:%v\n", err)
@@ -71,8 +71,8 @@ func Init(filePath string) (err error) {
 		fmt.Println("config info be changed...")
 		// update the AppConfig
 		if err := viper.Unmarshal(Conf); err != nil {
-			zap.L().Error("viper.Unmarshal failed, err:",zap.Error(err))
-			return 
+			zap.L().Error("viper.Unmarshal failed, err:", zap.Error(err))
+			return
 		}
 	})
 	return

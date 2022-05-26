@@ -14,17 +14,18 @@ log:
   max_size: 200
   max_age: 30
   max_backups: 7
+
 mysql:
-  host: mysql8019
-  port: 3306
-  user: "root"
-  password: "root"
-  dbname: "bluebell"
+  host: xxxx
+  port: xxxx
+  user: "xxxx"
+  password: "xxx"
+  dbname: "tiktok"
   max_open_conns: 200
   max_idle_conns: 50
 redis:
-  host: redis507
-  port: 6379
-  password: ""
+  host: xxxx
+  port: xxxx
+  password: "xxxx"
   db: 0
   pool_size: 100
