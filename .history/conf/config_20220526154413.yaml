@@ -1,0 +1,31 @@
+name: "tiktok"
+mode: "dev"
+port: 8080
+version: "v0.0.1"
+start_time: "2022-05-15"
+machine_id: 1
+
+auth:
+  jwt_expire: 8760
+
+log:
+  level: "info"
+  filename: "web_app.log"
+  max_size: 200
+  max_age: 30
+  max_backups: 7
+
+mysql:
+  host: 114.116.252.88
+  port: 131313
+  user: "rootsql"
+  password: "root"
+  dbname: "tiktok"
+  max_open_conns: 200
+  max_idle_conns: 50
+redis:
+  host: 82.157.141.199
+  port: 6379
+  password: "redisserver"
+  db: 0
+  pool_size: 100
