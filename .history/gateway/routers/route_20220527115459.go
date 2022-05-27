@@ -39,7 +39,7 @@ func registRouter(r *gin.Engine) {
 	apiRouter := r.Group("/douyin")
 	{
 		// basic apis
-		apiRouter.POST("/user/register/",)
+		apiRouter.POST("/user/register/"，)g
 		apiRouter.POST("/user/login/")
 		apiRouter.GET("/feed/").Use()
 		apiRouter.GET("/user/").Use()
