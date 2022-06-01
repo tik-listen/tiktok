@@ -3,7 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"tiktok/gateway/io"
+	"tiktok/base/io"
 	"tiktok/base/mymysql/tiktokdb"
 )
 

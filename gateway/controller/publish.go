@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"path/filepath"
-	"tiktok/gateway/io"
+	"tiktok/base/io"
 	"tiktok/base/mymysql/tiktokdb"
 )
 
