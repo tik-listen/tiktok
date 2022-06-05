@@ -4,11 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
-	"net/http"
-	"sync/atomic"
-	"tiktok/base/code"
-	io2 "tiktok/base/io"
-	"tiktok/base/mymysql/tiktokdb"
+	"tiktok/base/common"
+	"tiktok/base/io"
 	"tiktok/service/usersrv/logic"
 )
 
@@ -16,7 +13,7 @@ import (
 func RegisterHandler(c *gin.Context) {
 
 	// 1. 获取参数和参数校验
-	p := new(io2.ParamRegister)
+	p := new(io.ParamRegister)
 	if err := c.ShouldBindJSON(p); err != nil {
 		// 请求参数有误，直接返回响应
 		zap.L().Error("register with invalid param", zap.Error(err))
@@ -24,7 +21,7 @@ func RegisterHandler(c *gin.Context) {
 		errors := err.(validator.ValidationErrors)
 		if errors != nil {
 			// 返回参数错误响应
-			io2.ResponseError(c, code.CodeInvalidParam)
+			io.ResponseError(c, common.CodeInvalidParam)
 			return
 		}
 		return
@@ -32,79 +29,65 @@ func RegisterHandler(c *gin.Context) {
 
 	// 2. 服务调用
 	// 目前是直接调用模块的 logic 功能
-	logic.RegisterHandler(c, p)
-	// 3. 返回响应
-	io2.ResponseSuccess(c, nil)
-}
-
-var userIdSequence = int64(1)
-
-type UserLoginResponse struct {
-	io2.Response
-	UserId int64  `json:"user_id,omitempty"`
-	Token  string `json:"token"`
-}
-
-type UserResponse struct {
-	io2.Response
-	User tiktokdb.User `json:"user"`
-}
-
-func Register(c *gin.Context) {
-	username := c.Query("username")
-	password := c.Query("password")
-
-	token := username + password
-
-	if _, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: io2.Response{StatusCode: 1, StatusMsg: "User already exist"},
-		})
-	} else {
-		atomic.AddInt64(&userIdSequence, 1)
-		newUser := tiktokdb.User{
-			Id:   userIdSequence,
-			Name: username,
-		}
-		usersLoginInfo[token] = newUser
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: io2.Response{StatusCode: 0},
-			UserId:   userIdSequence,
-			Token:    username + password,
-		})
+	if err := logic.RegisterHandler(c, p); err != nil {
+		zap.L().Error("register failed", zap.Error(err))
+		io.ResponseError(c, common.CodeRegisterFailed)
+		return
 	}
-}
 
-func Login(c *gin.Context) {
-	username := c.Query("username")
-	password := c.Query("password")
-
-	token := username + password
-
-	if user, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: io2.Response{StatusCode: 0},
-			UserId:   user.Id,
-			Token:    token,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: io2.Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-		})
+	// 3. 要求注册后自动登录
+	user := &io.ParamLogin{
+		Username: p.Username,
+		Password: p.Password,
 	}
-}
-
-func UserInfo(c *gin.Context) {
-	token := c.Query("token")
-
-	if user, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: io2.Response{StatusCode: 0},
-			User:     user,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: io2.Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-		})
+	userId, token, err := logic.Login(user)
+	if err != nil {
+		io.ResponseError(c, common.CodeInvalidLoginInfo)
+		return
 	}
+	c.Set("userId", userId)
+
+	// 4. 返回成功响应
+	io.ResponseSuccess4Login(c, token)
 }
+
+// LoginHandler 用户登录
+func LoginHandler(c *gin.Context) {
+
+	// 1. 获取参数和参数校验
+	p := new(io.ParamLogin)
+	if err := c.ShouldBindJSON(p); err != nil {
+		// 请求参数有误，直接返回响应
+		zap.L().Error("Login with invalid param", zap.Error(err))
+		io.ResponseError(c, common.CodeInvalidParam)
+		return
+	}
+
+	// 2. 服务调用
+	// 目前是直接调用模块的 logic 功能
+	userId, token, err := logic.Login(p)
+	if err != nil {
+		io.ResponseError(c, common.CodeInvalidLoginInfo)
+		return
+	}
+
+	c.Set("userId", userId)
+	// 3. 返回成功响应
+	io.ResponseSuccess4Login(c, token)
+
+}
+
+//func UserInfo(c *gin.Context) {
+//	token := c.Query("token")
+//
+//	if user, exist := usersLoginInfo[token]; exist {
+//		c.JSON(http.StatusOK, UserResponse{
+//			Response: io2.Response{StatusCode: 0},
+//			User:     user,
+//		})
+//	} else {
+//		c.JSON(http.StatusOK, UserResponse{
+//			Response: io2.Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+//		})
+//	}
+//}
