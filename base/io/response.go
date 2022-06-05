@@ -3,13 +3,13 @@ package io
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"tiktok/base/code"
+	"tiktok/base/common"
 	"tiktok/base/mymysql/tiktokdb"
 )
 
 type Response struct {
-	StatusCode int32  `json:"status_code"`
-	StatusMsg  string `json:"status_msg,omitempty"`
+	StatusCode common.ResCode `json:"status_code"`
+	StatusMsg  string         `json:"status_msg,omitempty"`
 }
 
 type FeedResponse struct {
@@ -49,36 +49,26 @@ type UserResponse struct {
 	User tiktokdb.User `json:"user"`
 }
 
-// ResponseData 响应的 Data
+// ResponseData 通用的响应内容
 type ResponseData struct {
-	Code code.ResCode `json:"code"`
-	Msg  interface{}  `json:"msg"`
-	Data interface{}  `json:"data,omitempty"`
+	Response
+	Msg  interface{} `json:"msg,omitempty"`
+	Data interface{} `json:"data,omitempty"`
 }
 
 // ResponseError 响应错误
-func ResponseError(c *gin.Context, code code.ResCode) {
+func ResponseError(c *gin.Context, code common.ResCode) {
 	c.JSON(http.StatusOK, &ResponseData{
-		Code: code,
-		Msg:  code.Msg(),
-		Data: nil,
+		Response: Response{code, code.Msg()},
 	})
 }
 
-// ResponseErrorWithMsg 响应错误附上 msg 信息
-func ResponseErrorWithMsg(c *gin.Context, code code.ResCode, msg interface{}) {
-	c.JSON(http.StatusOK, &ResponseData{
-		Code: code,
-		Msg:  msg,
-		Data: nil,
-	})
-}
-
-// ResponseSuccess 响应成功
-func ResponseSuccess(c *gin.Context, data interface{}) {
-	c.JSON(http.StatusOK, &ResponseData{
-		Code: code.CodeSuccess,
-		Msg:  code.CodeSuccess.Msg(),
-		Data: data,
+// ResponseSuccess4Login 注册响应成功
+func ResponseSuccess4Login(c *gin.Context, token string) {
+	userId, _ := c.Get("userId")
+	c.JSON(http.StatusOK, &UserLoginResponse{
+		Response: Response{common.CodeSuccess, common.CodeSuccess.Msg()},
+		UserId:   userId.(int64),
+		Token:    token,
 	})
 }

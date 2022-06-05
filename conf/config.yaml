@@ -29,3 +29,7 @@ redis:
   password: "xxxx"
   db: 0
   pool_size: 100
+
+usersrv:
+  host: 127.0.0.1
+  port: 9001

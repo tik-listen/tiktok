@@ -3,14 +3,19 @@ package mymysql
 import (
 	"context"
 	"fmt"
-	"log"
+	"go.uber.org/zap"
 	"tiktok/setting"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-var globalDB *gorm.DB
+var (
+	ConnectTimeout          = 30 * time.Second
+	globalDB       *gorm.DB = nil
+	err            error
+)
 
 func InitMysql(cfg *setting.MySQLConfig) error {
 	dsn := fmt.Sprintf(
@@ -18,17 +23,15 @@ func InitMysql(cfg *setting.MySQLConfig) error {
 		cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DB,
 	)
 
-	db, err := gorm.Open(mysql.Open(dsn))
+	globalDB, err = gorm.Open(mysql.Open(dsn))
 	if err != nil {
 		return err
 	}
-	globalDB = db
 
-	log.Print("db connected success")
+	zap.L().Info("init MySQL success:")
 	return nil
 }
 
 func GetDB(ctx context.Context) *gorm.DB {
 	return globalDB.WithContext(ctx)
 }
-

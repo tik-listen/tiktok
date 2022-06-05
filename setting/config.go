@@ -10,6 +10,7 @@ import (
 
 var Conf = new(AppConfig)
 
+// AppConfig 需要初始化的项目
 type AppConfig struct {
 	Name      string `mapstructure:"name"`
 	Mode      string `mapstructure:"mode"`
@@ -18,9 +19,10 @@ type AppConfig struct {
 	MachineID int64  `mapstructure:"machine_id"`
 	Port      int    `mapstructure:"port"`
 
-	*LogConfig   `mapstructure:"log"`
-	*MySQLConfig `mapstructure:"mysql"`
-	*RedisConfig `mapstructure:"redis"`
+	*LogConfig     `mapstructure:"log"`
+	*MySQLConfig   `mapstructure:"mysql"`
+	*RedisConfig   `mapstructure:"redis"`
+	*UserSrvConfig `mapstructure:"usersrv"`
 }
 
 type MySQLConfig struct {
@@ -48,6 +50,10 @@ type LogConfig struct {
 	MaxSize    int    `mapstructure:"max_size"`
 	MaxAge     int    `mapstructure:"max_age"`
 	MaxBackups int    `mapstructure:"max_backups"`
+}
+type UserSrvConfig struct {
+	Host string `mapstructure:"host"`
+	Port string `mapstructure:"port"`
 }
 
 func Init(filePath string) (err error) {
