@@ -5,10 +5,12 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 var Conf = new(AppConfig)
 
+// AppConfig 需要初始化的项目
 type AppConfig struct {
 	Name      string `mapstructure:"name"`
 	Mode      string `mapstructure:"mode"`
@@ -17,9 +19,10 @@ type AppConfig struct {
 	MachineID int64  `mapstructure:"machine_id"`
 	Port      int    `mapstructure:"port"`
 
-	*LogConfig   `mapstructure:"log"`
-	*MySQLConfig `mapstructure:"mysql"`
-	*RedisConfig `mapstructure:"redis"`
+	*LogConfig     `mapstructure:"log"`
+	*MySQLConfig   `mapstructure:"mysql"`
+	*RedisConfig   `mapstructure:"redis"`
+	*UserSrvConfig `mapstructure:"usersrv"`
 }
 
 type MySQLConfig struct {
@@ -48,32 +51,34 @@ type LogConfig struct {
 	MaxAge     int    `mapstructure:"max_age"`
 	MaxBackups int    `mapstructure:"max_backups"`
 }
+type UserSrvConfig struct {
+	Host string `mapstructure:"host"`
+	Port string `mapstructure:"port"`
+}
 
 func Init(filePath string) (err error) {
 
-	viper.SetConfigFile("config.yaml")
+	viper.SetConfigFile(filePath)
 	err = viper.ReadInConfig()
-	// TODO: need to log
 	if err != nil {
 		fmt.Printf("viper.ReadInConfig failed, err:%v\n", err)
-		return
+		return err
 	}
 
 	// unmarshal the config info to the struct AppConfig(pointer Conf)
 	if err := viper.Unmarshal(Conf); err != nil {
-		// TODO: need to log
 		fmt.Printf("viper.Unmarshal failed, err:%v\n", err)
+		return err
 	}
 	// listen the Config
 	viper.WatchConfig()
 	// when it changes
 	viper.OnConfigChange(func(in fsnotify.Event) {
-		// TODO: need to log
 		fmt.Println("config info be changed...")
 		// update the AppConfig
 		if err := viper.Unmarshal(Conf); err != nil {
-			// TODO: need to log
-			fmt.Printf("viper.Unmarshal failed, err:%v\n", err)
+			zap.L().Error("viper.Unmarshal failed, err:", zap.Error(err))
+			return
 		}
 	})
 	return

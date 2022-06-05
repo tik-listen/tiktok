@@ -2,59 +2,68 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-sql-driver/mysql"
 	"os"
-	"tiktok/gateway/controller"
+
+	"tiktok/base/logger"
+	"tiktok/base/mymysql"
+	"tiktok/base/myredis"
+	"tiktok/base/snowflake"
 	"tiktok/gateway/routers"
-	"tiktok/pkg/logger"
 	"tiktok/setting"
+
+	"go.uber.org/zap"
 )
 
-func initApp() {
+func initApp() error {
+
+	// 加载配置文件
 	if err := setting.Init(os.Args[1]); err != nil {
-		fmt.Printf("load config failed, err:%v\n", err)
-		return
+		zap.L().Fatal("load config failed, err:", zap.Error(err))
+		return err
 	}
 
+	// 加载日志
 	if err := logger.Init(setting.Conf.LogConfig, setting.Conf.Mode); err != nil {
+		zap.L().Fatal("load config failed, err:", zap.Error(err))
 		fmt.Printf("init logger failed, err:%v\n", err)
-		return
+		return err
 	}
 
-	if err := mysql.Init(setting.Conf.MySQLConfig); err != nil {
-		fmt.Printf("init mysql failed, err:%v\n", err)
-		return
+	// 加载 MySQL db
+	if err := mymysql.InitMysql(setting.Conf.MySQLConfig); err != nil {
+		zap.L().Fatal("load config failed, err:", zap.Error(err))
+		return err
 	}
 
-	defer mysql.Close()
-	if err := redis.Init(setting.Conf.RedisConfig); err != nil {
-		fmt.Printf("init redis failed, err:%v\n", err)
-		return
+	// 加载 Redis cache
+	if err := myredis.Init(setting.Conf.RedisConfig); err != nil {
+		zap.L().Fatal("init redis failed, err:", zap.Error(err))
+		return err
 	}
-	defer redis.Close()
+	defer myredis.Close()
 
+	// 加载 雪花 id
 	if err := snowflake.Init(setting.Conf.StartTime, setting.Conf.MachineID); err != nil {
-		fmt.Printf("init snowflake failed, err:%v\n", err)
-		return
+		zap.L().Fatal("init redis failed, err:", zap.Error(err))
+		return err
 	}
 
-	// 初始化 gin 框架内置的校验器使用的翻译器
-	if err := controller.InitTrans("zh"); err != nil {
-		fmt.Printf("init validator trans failed, err:%v\n", err)
-		return
-	}
-	// 注册路由
-	r := routers.SetupRouter(setting.Conf.Mode)
-	err := r.Run(fmt.Sprintf(":%d", setting.Conf.Port))
-	if err != nil {
-		fmt.Printf("run server failed, err:%v\n", err)
-		return
-	}
+	return nil
 }
+
 func main() {
+
+	// 检验参数是否有指定配置文件路径
 	if len(os.Args) < 2 {
 		fmt.Println("need config file.eg: bluebell config.yaml")
-		return
+		os.Exit(1)
 	}
 
+	// 初始化各种应用
+	if err := initApp(); err != nil {
+		os.Exit(1)
+	}
+
+	// 启动服务
+	routers.RunServer(setting.Conf.Mode)
 }
