@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"tiktok/service/usersrv/controller"
 )
 
 func RunServer(mode string) {
@@ -45,7 +44,7 @@ func RunServer(mode string) {
 func registerRouter(r *gin.Engine) {
 
 	// 注册接口
-	r.POST("/usersrv/register/", controller.RegisterHandler)
+	//r.POST("/usersrv/register/", controller.RegisterHandler)
 
 	// 登录接口
 	r.POST("/usersrv/login/")

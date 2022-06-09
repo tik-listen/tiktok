@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"tiktok/base/common"
 	"tiktok/base/io"
+	"tiktok/base/jwt"
 	"tiktok/service/usersrv/logic"
 )
 
@@ -29,23 +30,18 @@ func RegisterHandler(c *gin.Context) {
 
 	// 2. 服务调用
 	// 目前是直接调用模块的 logic 功能
-	if err := logic.RegisterHandler(c, p); err != nil {
+	user, err := logic.RegisterHandler(c, p)
+	if err != nil {
 		zap.L().Error("register failed", zap.Error(err))
 		io.ResponseError(c, common.CodeRegisterFailed)
 		return
 	}
-
-	// 3. 要求注册后自动登录
-	user := &io.ParamLogin{
-		Username: p.Username,
-		Password: p.Password,
-	}
-	userId, token, err := logic.Login(user)
+	token, err := jwt.GenToken(user.UserID, user.Username)
 	if err != nil {
-		io.ResponseError(c, common.CodeInvalidLoginInfo)
+		io.ResponseError(c, common.CodeTokenCreateErr)
 		return
 	}
-	c.Set("userId", userId)
+	c.Set("userId", user.UserID)
 
 	// 4. 返回成功响应
 	io.ResponseSuccess4Login(c, token)

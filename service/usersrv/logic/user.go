@@ -11,11 +11,11 @@ import (
 )
 
 // RegisterHandler 注册业务操作
-func RegisterHandler(ctx context.Context, p *io.ParamRegister) error {
+func RegisterHandler(ctx context.Context, p *io.ParamRegister) (*tiktokdb.User, error) {
 
 	// 1.判断用户存不存在
 	if err := models.CheckUserExist(ctx, p.Username); err != nil {
-		return common.ErrorUserExist
+		return nil, common.ErrorUserExist
 	}
 
 	// 2.生成 user_id
@@ -29,7 +29,7 @@ func RegisterHandler(ctx context.Context, p *io.ParamRegister) error {
 	}
 
 	// 3.保存进数据库
-	return models.InsertOneUser(ctx, user)
+	return user, models.InsertOneUser(ctx, user)
 }
 
 func Login(p *io.ParamLogin) (userId int64, token string, err error) {

@@ -12,6 +12,7 @@ const (
 	CodeNeedLogin        ResCode = 1006
 	CodeInvalidToken     ResCode = 1007
 	CodeRegisterFailed   ResCode = 1008
+	CodeTokenCreateErr   ResCode = 1009
 )
 
 var codeMsgMap = map[ResCode]string{
