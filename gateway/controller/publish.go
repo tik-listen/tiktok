@@ -1,13 +1,15 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"path/filepath"
+	"strconv"
 	"tiktok/base/common"
 	"tiktok/base/io"
 	"tiktok/base/jwt"
+	"tiktok/base/snowflake"
+	"tiktok/service/publishsrv"
 )
 
 func PublishActionHandler(c *gin.Context) {
@@ -26,12 +28,20 @@ func PublishActionHandler(c *gin.Context) {
 		io.ResponseError(c, common.CodeVideoErr)
 		return
 	}
-	finalFileName := fmt.Sprintf("%d_%s", MyClaims.UserID, data.Filename)
-	saveFile := filepath.Join("./videosrv/", finalFileName)
+	name := data.Filename
+	//写入文件
+	videoId := snowflake.GenID()
+	saveFile := filepath.Join("./videosrv/", strconv.FormatInt(videoId, 10))
 	if err := c.SaveUploadedFile(data, saveFile); err != nil {
 		zap.L().Error("video fail", zap.Error(err))
 		io.ResponseError(c, common.CodeSaveFileErr)
 		return
 	}
-
+	//更新缓存和数据库
+	err = publishsrv.SaveVideoIm(name, MyClaims.UserID, videoId, c)
+	if err != nil {
+		zap.L().Error("sql err", zap.Error(err))
+		io.ResponseError(c, common.CodeVideoImFail)
+		return
+	}
 }

@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mysql://114.116.252.88:3306</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="tiktok@114.116.252.88" uuid="745a7b71-e100-4042-941e-9515f5c4d388">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://114.116.252.88:3306/tiktok</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
