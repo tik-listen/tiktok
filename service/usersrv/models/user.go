@@ -10,7 +10,7 @@ import (
 	"tiktok/base/mymysql/tiktokdb"
 )
 
-func CheckUserExist(ctx context.Context, username string) (err error) {
+func CheckUserExist(ctx context.Context, username string) (bool, error) {
 	return tiktokdb.CheckUserExist(ctx, username)
 }
 
