@@ -23,6 +23,12 @@ type ParamLogin struct {
 	Password string `form:"password" binding:"required,min=6,max=32"`
 }
 
+// FeedRequest 请求视频流
+type FeedRequest struct {
+	LastTime int64  `json:"last_time"`
+	Token    string `json:"token"`
+}
+
 // getCurrentUserID: Get the user id, who in login state
 func getCurrentUserID(c *gin.Context) (userID int64, err error) {
 	uid, ok := c.Get(common.KCtxUserIDKey)

@@ -13,6 +13,8 @@ const (
 	CodeInvalidToken     ResCode = 1007
 	CodeRegisterFailed   ResCode = 1008
 	CodeTokenCreateErr   ResCode = 1009
+	CodeVideoErr         ResCode = 1010
+	CodeSaveFileErr      ResCode = 1011
 )
 
 var codeMsgMap = map[ResCode]string{
@@ -24,6 +26,8 @@ var codeMsgMap = map[ResCode]string{
 	CodeRegisterFailed:   "注册失败",
 	CodeNeedLogin:        "需要登录",
 	CodeInvalidToken:     "无效的token",
+	CodeVideoErr:         "获取视频流失败",
+	CodeSaveFileErr:      "保存文件失败",
 }
 
 func (c ResCode) Msg() string {

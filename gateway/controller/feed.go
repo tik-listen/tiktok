@@ -1,22 +1,36 @@
 package controller
 
-//import (
-//	"github.com/gin-gonic/gin"
-//	"net/http"
-//	"tiktok/base/io"
-//	"time"
-//)
-//
-//// Feed same demo video list for every request
-//func Feed(c *gin.Context) {
-//	// 参数校验
-//
-//	// 调用逻辑
-//	// VedioList :=
-//	// 返回响应
-//	c.JSON(http.StatusOK, io.FeedResponse{
-//		Response:  io.Response{StatusCode: 0},
-//		VideoList: DemoVideos,
-//		NextTime:  time.Now().Unix(),
-//	})
-//}
+import (
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+	"tiktok/base/common"
+	"tiktok/base/io"
+	"tiktok/base/jwt"
+)
+
+func FeedHandler(c *gin.Context) {
+	last_time := c.PostForm("last_time")
+	token := c.PostForm("token")
+	if last_time == "" {
+		if token != "" {
+			NowClaim, err := jwt.ParseToken(token)
+			if err != nil {
+				zap.L().Error("token is invalid", zap.Error(err))
+				io.ResponseError(c, common.CodeTokenCreateErr)
+				return
+			}
+		}
+		return "video"
+	} else {
+		if token != "" {
+			NowClaim, err := jwt.ParseToken(token)
+			if err != nil {
+				zap.L().Error("token is invalid", zap.Error(err))
+				io.ResponseError(c, common.CodeTokenCreateErr)
+				return
+			}
+		}
+		return "timevideo"
+	}
+
+}

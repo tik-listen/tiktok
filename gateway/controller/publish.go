@@ -1,62 +1,37 @@
 package controller
 
-//
-//import (
-//	"fmt"
-//	"github.com/gin-gonic/gin"
-//	"net/http"
-//	"path/filepath"
-//	"tiktok/base/io"
-//	"tiktok/base/mymysql/tiktokdb"
-//)
-//
-//type VideoListResponse struct {
-//	io.Response
-//	VideoList []tiktokdb.Video `json:"video_list"`
-//}
-//
-//// Publish check token then save upload file to public directory
-//func Publish(c *gin.Context) {
-//	token := c.PostForm("token")
-//
-//	if _, exist := usersLoginInfo[token]; !exist {
-//		c.JSON(http.StatusOK, io.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
-//		return
-//	}
-//
-//	data, err := c.FormFile("data")
-//	if err != nil {
-//		c.JSON(http.StatusOK, io.Response{
-//			StatusCode: 1,
-//			StatusMsg:  err.Error(),
-//		})
-//		return
-//	}
-//
-//	filename := filepath.Base(data.Filename)
-//	user := usersLoginInfo[token]
-//	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
-//	saveFile := filepath.Join("./public/", finalName)
-//	if err := c.SaveUploadedFile(data, saveFile); err != nil {
-//		c.JSON(http.StatusOK, io.Response{
-//			StatusCode: 1,
-//			StatusMsg:  err.Error(),
-//		})
-//		return
-//	}
-//
-//	c.JSON(http.StatusOK, io.Response{
-//		StatusCode: 0,
-//		StatusMsg:  finalName + " uploaded successfully",
-//	})
-//}
-//
-//// PublishList all users have same publish video list
-//func PublishList(c *gin.Context) {
-//	c.JSON(http.StatusOK, VideoListResponse{
-//		Response: io.Response{
-//			StatusCode: 0,
-//		},
-//		VideoList: DemoVideos,
-//	})
-//}
+import (
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+	"path/filepath"
+	"tiktok/base/common"
+	"tiktok/base/io"
+	"tiktok/base/jwt"
+)
+
+func PublishActionHandler(c *gin.Context) {
+	//解析token
+	token := c.PostForm("token")
+	MyClaims, err := jwt.ParseToken(token)
+	if err != nil {
+		zap.L().Error("token is invalid", zap.Error(err))
+		io.ResponseError(c, common.CodeTokenCreateErr)
+		return
+	}
+	//拿到文件流
+	data, err := c.FormFile("data")
+	if err != nil {
+		zap.L().Error("video fail", zap.Error(err))
+		io.ResponseError(c, common.CodeVideoErr)
+		return
+	}
+	finalFileName := fmt.Sprintf("%d_%s", MyClaims.UserID, data.Filename)
+	saveFile := filepath.Join("./videosrv/", finalFileName)
+	if err := c.SaveUploadedFile(data, saveFile); err != nil {
+		zap.L().Error("video fail", zap.Error(err))
+		io.ResponseError(c, common.CodeSaveFileErr)
+		return
+	}
+
+}
