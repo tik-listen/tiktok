@@ -87,7 +87,7 @@ func registerRouter(r *gin.Engine) {
 		// 评论相关路由组 with 鉴权
 		comment := apiRouter.Group("/comment")
 		{
-			comment.POST("/action/")
+			comment.POST("/action/", controller.CommentHandler)
 			comment.GET("/list/")
 		}
 

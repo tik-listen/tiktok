@@ -17,10 +17,20 @@ type ParamRegister struct {
 	Password string `form:"password" binding:"required,min=6,max=32"`
 }
 
-// ParamLogin 注册请求参数，注意不要修改
+// ParamLogin 登录请求参数，注意不要修改
 type ParamLogin struct {
 	Username string `form:"username" binding:"required,min=4,max=32"`
 	Password string `form:"password" binding:"required,min=6,max=32"`
+}
+
+// ParamComment 评论相关参数
+type ParamComment struct {
+	UserId      int64  `form:"user_id" binding:"required"`
+	Token       string `form:"token" binding:"required"`
+	VideoId     int64  `form:"video_id" binding:"required"`
+	ActionType  int64  `form:"action_type" binding:"required"`
+	CommentText string `form:"comment_text" binding:"required"`
+	CommentId   int64  `form:"comment_id" binding:"required"`
 }
 
 // getCurrentUserID: Get the user id, who in login state

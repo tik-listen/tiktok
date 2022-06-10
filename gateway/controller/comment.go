@@ -1,5 +1,7 @@
 package controller
 
+import "github.com/gin-gonic/gin"
+
 // import (
 // 	"github.com/gin-gonic/gin"
 // 	"net/http"
@@ -36,3 +38,7 @@ package controller
 // 		CommentList: DemoComments,
 // 	})
 // }
+
+func CommentHandler(c *gin.Context) {
+
+}
