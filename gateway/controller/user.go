@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 	"tiktok/base/common"
@@ -14,7 +15,8 @@ func RegisterHandler(c *gin.Context) {
 
 	// 1. 获取参数和参数校验
 	p := new(io.ParamRegister)
-	if err := c.ShouldBindJSON(p); err != nil {
+	// 这里是针对 GET method 的操作
+	if err := c.ShouldBindWith(p, binding.Form); err != nil {
 		// 请求参数有误，直接返回响应
 		zap.L().Error("register with invalid param", zap.Error(err))
 		// 判断err是不是validator.ValidationErrors 类型
@@ -35,7 +37,7 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 
-	// 3. 要求注册后自动登录
+	// 自动登录，获取 token
 	user := &io.ParamLogin{
 		Username: p.Username,
 		Password: p.Password,
@@ -56,7 +58,7 @@ func LoginHandler(c *gin.Context) {
 
 	// 1. 获取参数和参数校验
 	p := new(io.ParamLogin)
-	if err := c.ShouldBindJSON(p); err != nil {
+	if err := c.ShouldBindWith(p, binding.Form); err != nil {
 		// 请求参数有误，直接返回响应
 		zap.L().Error("Login with invalid param", zap.Error(err))
 		io.ResponseError(c, common.CodeInvalidParam)

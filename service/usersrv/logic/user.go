@@ -14,7 +14,11 @@ import (
 func RegisterHandler(ctx context.Context, p *io.ParamRegister) error {
 
 	// 1.判断用户存不存在
-	if err := models.CheckUserExist(ctx, p.Username); err != nil {
+	flag, err := models.CheckUserExist(ctx, p.Username)
+	if err != nil {
+		return common.ErrorMysqlDbErr
+	}
+	if flag {
 		return common.ErrorUserExist
 	}
 

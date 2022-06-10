@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
-	"tiktok/base/common"
 	"tiktok/base/mymysql"
 )
 
@@ -17,23 +16,21 @@ type User struct {
 	Password string `db:"password"`
 }
 
-// CheckUserExist 检查指定用户名的用户是否存在 TODO:这里写法不好，要改
-func CheckUserExist(ctx context.Context, username string) error {
+// CheckUserExist 检查指定用户名的用户是否存在
+func CheckUserExist(ctx context.Context, username string) (bool, error) {
 
 	// 获取数据库连接
 	db := mymysql.GetDB(ctx)
 
 	var count int64
-
-	if err := db.Table("users").Where("username = ?", username).Count(&count); err != nil {
-		return common.ErrorMysqlDbErr
+	if result := db.Table("users").Where("username = ?", username).Count(&count); result.Error != nil {
+		return true, result.Error
+	}
+	if count > 0 {
+		return true, nil
 	}
 
-	if count <= 0 {
-		return common.ErrorUserExist
-	}
-
-	return nil
+	return false, nil
 }
 
 // InsertOneUser 向数据库中插入一条新的用户记录

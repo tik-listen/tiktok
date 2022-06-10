@@ -63,7 +63,7 @@ func ResponseError(c *gin.Context, code common.ResCode) {
 	})
 }
 
-// ResponseSuccess4Login 注册响应成功
+// ResponseSuccess4Login 登录成功
 func ResponseSuccess4Login(c *gin.Context, token string) {
 	userId, _ := c.Get("userId")
 	c.JSON(http.StatusOK, &UserLoginResponse{
