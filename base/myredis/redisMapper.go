@@ -22,7 +22,7 @@ func GetList(key string, start, stop int64) ([]string, error) {
 }
 
 // GetVideoList 获取投稿视频列表
-func GetVideoList(key string) ([]string, error) {
+func GetVideoList() ([]string, error) {
 	return GetList(key, 0, 10)
 }
 

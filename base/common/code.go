@@ -16,6 +16,7 @@ const (
 	CodeVideoErr         ResCode = 1010
 	CodeSaveFileErr      ResCode = 1011
 	CodeVideoImFail      ResCode = 1012
+	CodeGetVideoListErr  ResCode = 1013
 )
 
 var codeMsgMap = map[ResCode]string{
@@ -30,6 +31,7 @@ var codeMsgMap = map[ResCode]string{
 	CodeVideoErr:         "获取视频流失败",
 	CodeSaveFileErr:      "保存文件失败",
 	CodeVideoImFail:      "写库失败",
+	CodeGetVideoListErr:  "获取视频列表失败",
 }
 
 func (c ResCode) Msg() string {

@@ -1,6 +1,7 @@
 package tiktokdb
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"tiktok/base/mymysql"
 	"time"
@@ -18,10 +19,13 @@ type Video struct {
 	Name          string    `json:"name" db:"name"`
 }
 
+// InsertVideo 插入video结构体
 func InsertVideo(video Video, c *gin.Context) error {
 	db := mymysql.GetDB(c)
 	return db.Table("video").Create(video).Error
 }
+
+// CheckVideoExist 根据视频名，用户id，检查video是否存在
 func CheckVideoExist(ctx *gin.Context, name string, userid int64) bool {
 	db := mymysql.GetDB(ctx)
 	var count int64
@@ -33,4 +37,15 @@ func CheckVideoExist(ctx *gin.Context, name string, userid int64) bool {
 	}
 
 	return false
+}
+
+// GetVideoListWithTime 获取某一时间之前的视频列表
+func GetVideoListWithTime(c *gin.Context, now time.Time) ([]Video, error) {
+	db := mymysql.GetDB(c)
+	var res []Video
+	err := db.Table("video").Where("data < ", now).Limit(10).Find(&res)
+	if err != nil {
+		return nil, errors.New("MySQL ERR")
+	}
+	return res, nil
 }

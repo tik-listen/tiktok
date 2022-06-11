@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
+	"errors"
 	"tiktok/base/mymysql"
 )
 
@@ -61,6 +62,17 @@ func GetOneUser(ctx context.Context, user *User) (result User, err error) {
 	db.Where(user).Find(&result)
 
 	return
+}
+func GetOneUserWithId(ctx context.Context, id int64) (User, error) {
+
+	// 获取数据库连接
+	db := mymysql.GetDB(ctx)
+	var res User
+	err := db.Table("user").Where("user_id = ", id).Find(&res)
+	if err != nil {
+		return res, errors.New("MySQL ERR")
+	}
+	return res, nil
 }
 
 // encryptPassword 密码加密
