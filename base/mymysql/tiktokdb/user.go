@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"tiktok/base/mymysql"
 )
 
@@ -39,9 +40,6 @@ func InsertOneUser(ctx context.Context, user *User) (err error) {
 	// 获取数据库连接
 	db := mymysql.GetDB(ctx)
 
-	// 对密码进行加密
-	user.Password = encryptPassword(user.Password)
-
 	// 用户注册信息入库
 	db.Table("users").Create(user)
 
@@ -49,15 +47,18 @@ func InsertOneUser(ctx context.Context, user *User) (err error) {
 }
 
 // GetOneUser 数据库中查询一条用户记录
-func GetOneUser(ctx context.Context, user *User) (result User, err error) {
-
+func GetOneUser(ctx context.Context, user *User) (*User, error) {
+	result := &User{}
 	// 获取数据库连接
 	db := mymysql.GetDB(ctx)
 
 	// 查询相关记录
-	db.Where(user).Find(&result)
-
-	return
+	err := db.Where(user).First(result).Error
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(result)
+	return result, nil
 }
 
 // encryptPassword 密码加密

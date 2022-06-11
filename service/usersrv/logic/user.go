@@ -38,19 +38,13 @@ func RegisterHandler(ctx context.Context, p *io.ParamRegister) error {
 
 func Login(p *io.ParamLogin) (userId int64, token string, err error) {
 
-	// 创建要插入的结构
-	user := &tiktokdb.User{
-		Username: p.Username,
-		Password: p.Password,
-	}
-
-	// 调用插入操作
-	if userId, err = models.Login(user); err != nil {
+	// 调用登录操作
+	if userId, err = models.Login(p.Username, p.Password); err != nil {
 		return -1, "", err
 	}
 
 	// 生成JWT
-	token, err = jwt.GenToken(user.UserID, user.Username)
+	token, err = jwt.GenToken(userId, p.Username)
 	if err != nil {
 		return
 	}
@@ -59,22 +53,22 @@ func Login(p *io.ParamLogin) (userId int64, token string, err error) {
 }
 
 // GetUserInfo 获取用户信息
-func GetUserInfo(ctx context.Context, p *io.UserInfoReq) (resp *io.UserInfoResp, err error) {
-	// 解析 token
-	//claim, err := jwt.ParseToken(p.Token)
-	// 1.判断用户存不存在
-	//flag, err := models.CheckUserExist(ctx, claim.Username)
-	//if err != nil {
-	//	return nil, common.ErrorMysqlDbErr
-	//}
-	//if !flag {
-	//	return nil, common.ErrorUserNotExist
-	//}
-	// TODO: 获取各种信息粉丝和关注信息
-	resp.ID = p.UserID
-	resp.FollowerCount = 0
-	resp.FollowCount = 0
-	resp.Name = "claim.Username"
-	resp.IsFollow = false
-	return resp, nil
-}
+//func GetUserInfo(ctx context.Context, p *io.UserInfoReq) (resp *io.UserInfoResp, err error) {
+//	// 解析 token
+//	//claim, err := jwt.ParseToken(p.Token)
+//	// 1.判断用户存不存在
+//	//flag, err := models.CheckUserExist(ctx, claim.Username)
+//	//if err != nil {
+//	//	return nil, common.ErrorMysqlDbErr
+//	//}
+//	//if !flag {
+//	//	return nil, common.ErrorUserNotExist
+//	//}
+//	// TODO: 获取各种信息粉丝和关注信息
+//	resp.ID = 1233
+//	resp.FollowerCount = 0
+//	resp.FollowCount = 0
+//	resp.Name = "claim.Username"
+//	resp.IsFollow = false
+//	return resp, nil
+//}

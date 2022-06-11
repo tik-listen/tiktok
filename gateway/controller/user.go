@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 	"tiktok/base/common"
 	"tiktok/base/io"
+	"tiktok/base/jwt"
 	"tiktok/service/usersrv/logic"
 )
 
@@ -74,7 +75,6 @@ func LoginHandler(c *gin.Context) {
 		io.ResponseError(c, common.CodeInvalidLoginInfo)
 		return
 	}
-
 	c.Set("userId", userId)
 	// 3. 返回成功响应
 	io.ResponseSuccess4Login(c, token)
@@ -87,17 +87,30 @@ func UserInfo(c *gin.Context) {
 	// 绑定 Query 参数
 	if err := c.ShouldBindWith(p, binding.Form); err != nil {
 		// 请求参数有误，直接返回响应
-		zap.L().Error("Login with invalid param", zap.Error(err))
+		zap.L().Error("get user info invalid param", zap.Error(err))
 		io.ResponseError(c, common.CodeInvalidParam)
 		return
 	}
 	// 2. 服务调用
 	// 目前是直接调用模块的 logic 功能
-	resp, err := logic.GetUserInfo(c, p)
+	//resp, err := logic.GetUserInfo(c, p)
+	//if err != nil {
+	//	io.ResponseError(c, common.CodeInvalidLoginInfo)
+	//	return
+	//}
+	claim, err := jwt.ParseToken(p.Token)
 	if err != nil {
-		io.ResponseError(c, common.CodeInvalidLoginInfo)
+		io.ResponseError(c, common.CodeNeedLogin)
 		return
 	}
+	resp := new(io.UserInfoResp)
+	resp.ID = claim.UserID
+	resp.FollowerCount = 10
+	resp.FollowCount = 10
+	resp.Name = claim.Username
+	resp.IsFollow = false
+
 	// 3. 返回成功响应
 	io.ResponseSuccessUserInfo(c, resp)
+
 }

@@ -36,17 +36,16 @@ func encryptPassword(oPassword string) string {
 	return hex.EncodeToString(h.Sum([]byte(oPassword)))
 }
 
-func Login(user *tiktokdb.User) (userId int64, err error) {
+func Login(username string, password string) (int64, error) {
 
 	// 用一个 context 控制操作声明周期
 	ctx, cancel := context.WithTimeout(context.Background(), mymysql.ConnectTimeout)
 	defer cancel()
-
 	// 对密码进行加密
-	user.Password = encryptPassword(user.Password)
+	password = encryptPassword(password)
+	user := &tiktokdb.User{Username: username, Password: password}
 
 	res, err := tiktokdb.GetOneUser(ctx, user)
-
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return -1, common.ErrorInvalidPassword
