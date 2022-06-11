@@ -52,16 +52,16 @@ func registerRouter(r *gin.Engine) {
 	apiRouter := r.Group("/douyin")
 	{
 		// 注册接口
-		apiRouter.GET("/user/register/", controller.RegisterHandler)
+		apiRouter.POST("/user/register/", controller.RegisterHandler)
 
 		// 登录接口
-		apiRouter.GET("/user/login/", controller.LoginHandler)
+		apiRouter.POST("/user/login/", controller.LoginHandler)
 
 		// 视频流接口 with 鉴权
 		apiRouter.GET("/feed/").Use(middlewares.JWTAuthMiddleware())
 
 		// 获取用户信息接口
-		apiRouter.GET("/user/")
+		apiRouter.GET("/user/", controller.UserInfo).Use(middlewares.JWTAuthMiddleware())
 
 		// 发布相关路由组 with 鉴权
 		publish := apiRouter.Group("/publish").Use(middlewares.JWTAuthMiddleware())
@@ -78,7 +78,7 @@ func registerRouter(r *gin.Engine) {
 		favorite := apiRouter.Group("/favorite")
 		{
 			// 点赞操作
-			favorite.POST("/action/")
+			favorite.POST("/action/", controller.VideoLikeAction)
 
 			// 查看点赞记录操作
 			favorite.GET("/list/")

@@ -40,7 +40,7 @@ type UserListResponse struct {
 
 type UserLoginResponse struct {
 	Response
-	UserId int64  `json:"user_id,omitempty"`
+	UserId int64  `json:"user_id"`
 	Token  string `json:"token"`
 }
 
@@ -63,6 +63,15 @@ func ResponseError(c *gin.Context, code common.ResCode) {
 	})
 }
 
+type UserInfoResp struct {
+	Response
+	ID            int64  `json:"id"`
+	Name          string `json:"name"`
+	FollowCount   int    `json:"follow_count"`
+	FollowerCount int    `json:"follower_count"`
+	IsFollow      bool   `json:"is_follow"`
+}
+
 // ResponseSuccess4Login 登录成功
 func ResponseSuccess4Login(c *gin.Context, token string) {
 	userId, _ := c.Get("userId")
@@ -71,4 +80,9 @@ func ResponseSuccess4Login(c *gin.Context, token string) {
 		UserId:   userId.(int64),
 		Token:    token,
 	})
+}
+
+// ResponseSuccessUserInfo 返回用户信息
+func ResponseSuccessUserInfo(c *gin.Context, resp *UserInfoResp) {
+	c.JSON(http.StatusOK, resp)
 }

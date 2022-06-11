@@ -54,9 +54,6 @@ func GetOneUser(ctx context.Context, user *User) (result User, err error) {
 	// 获取数据库连接
 	db := mymysql.GetDB(ctx)
 
-	// 对密码进行加密
-	user.Password = encryptPassword(user.Password)
-
 	// 查询相关记录
 	db.Where(user).Find(&result)
 

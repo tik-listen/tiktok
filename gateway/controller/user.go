@@ -14,6 +14,7 @@ import (
 func RegisterHandler(c *gin.Context) {
 
 	// 1. 获取参数和参数校验
+	// 绑定 Query 参数
 	p := new(io.ParamRegister)
 	// 这里是针对 GET method 的操作
 	if err := c.ShouldBindWith(p, binding.Form); err != nil {
@@ -57,6 +58,7 @@ func RegisterHandler(c *gin.Context) {
 func LoginHandler(c *gin.Context) {
 
 	// 1. 获取参数和参数校验
+	// 绑定 Query 参数
 	p := new(io.ParamLogin)
 	if err := c.ShouldBindWith(p, binding.Form); err != nil {
 		// 请求参数有误，直接返回响应
@@ -79,17 +81,23 @@ func LoginHandler(c *gin.Context) {
 
 }
 
-//func UserInfo(c *gin.Context) {
-//	token := c.Query("token")
-//
-//	if user, exist := usersLoginInfo[token]; exist {
-//		c.JSON(http.StatusOK, UserResponse{
-//			Response: io2.Response{StatusCode: 0},
-//			User:     user,
-//		})
-//	} else {
-//		c.JSON(http.StatusOK, UserResponse{
-//			Response: io2.Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-//		})
-//	}
-//}
+func UserInfo(c *gin.Context) {
+	// 1. 获取参数和参数校验
+	p := new(io.UserInfoReq)
+	// 绑定 Query 参数
+	if err := c.ShouldBindWith(p, binding.Form); err != nil {
+		// 请求参数有误，直接返回响应
+		zap.L().Error("Login with invalid param", zap.Error(err))
+		io.ResponseError(c, common.CodeInvalidParam)
+		return
+	}
+	// 2. 服务调用
+	// 目前是直接调用模块的 logic 功能
+	resp, err := logic.GetUserInfo(c, p)
+	if err != nil {
+		io.ResponseError(c, common.CodeInvalidLoginInfo)
+		return
+	}
+	// 3. 返回成功响应
+	io.ResponseSuccessUserInfo(c, resp)
+}

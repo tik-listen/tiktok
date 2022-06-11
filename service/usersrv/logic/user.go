@@ -57,3 +57,24 @@ func Login(p *io.ParamLogin) (userId int64, token string, err error) {
 
 	return
 }
+
+// GetUserInfo 获取用户信息
+func GetUserInfo(ctx context.Context, p *io.UserInfoReq) (resp *io.UserInfoResp, err error) {
+	// 解析 token
+	//claim, err := jwt.ParseToken(p.Token)
+	// 1.判断用户存不存在
+	//flag, err := models.CheckUserExist(ctx, claim.Username)
+	//if err != nil {
+	//	return nil, common.ErrorMysqlDbErr
+	//}
+	//if !flag {
+	//	return nil, common.ErrorUserNotExist
+	//}
+	// TODO: 获取各种信息粉丝和关注信息
+	resp.ID = p.UserID
+	resp.FollowerCount = 0
+	resp.FollowCount = 0
+	resp.Name = "claim.Username"
+	resp.IsFollow = false
+	return resp, nil
+}

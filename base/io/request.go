@@ -23,6 +23,19 @@ type ParamLogin struct {
 	Password string `form:"password" binding:"required,min=6,max=32"`
 }
 
+// UserInfoReq 用户信息请求参数
+type UserInfoReq struct {
+	UserID int64  `form:"user_id" binding:"required"`
+	Token  string `form:"token" binding:"required"`
+}
+
+// LikeActionReq 点赞请求
+type LikeActionReq struct {
+	Token      string `form:"token" binding:"required"`
+	VideoID    int64  `form:"video_id" binding:"required"`
+	ActionType int32  `form:"action_type" binding:"required,oneof=0 1"`
+}
+
 // ParamComment 评论相关参数
 type ParamComment struct {
 	UserId      int64  `form:"user_id" binding:"required"`
