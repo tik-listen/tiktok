@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// vedio
+// Video vedio 在redis的格式 video+时间（到秒）的Set存储视频id
 type Video struct {
 	Id            int64     `json:"id,omitempty" db:"video_id"`
 	UserId        int64     `json:"author" db:"user_id"`
@@ -18,24 +18,14 @@ type Video struct {
 	Name          string    `json:"name" db:"name"`
 }
 
-func InsertVideo(name string, userId int64, videoId int64, c *gin.Context) error {
+func InsertVideo(video Video, c *gin.Context) error {
 	db := mymysql.GetDB(c)
-	video := Video{
-		Id:            videoId,
-		UserId:        userId,
-		CoverUrl:      "",
-		FavoriteCount: 0,
-		CommentCount:  0,
-		IsFavorite:    false,
-		Date:          time.Now(),
-		Name:          name,
-	}
 	return db.Table("video").Create(video).Error
 }
-func CheckVideoExist(ctx *gin.Context, id int64) bool {
+func CheckVideoExist(ctx *gin.Context, name string, userid int64) bool {
 	db := mymysql.GetDB(ctx)
 	var count int64
-	if result := db.Table("video").Where("video_id = ?", id).Count(&count); result.Error != nil {
+	if result := db.Table("video").Where("user_id = ?", userid, "name = ?", name).Count(&count); result.Error != nil {
 		return true
 	}
 	if count > 0 {

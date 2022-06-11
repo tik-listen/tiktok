@@ -29,14 +29,7 @@ func PublishActionHandler(c *gin.Context) {
 		return
 	}
 	name := data.Filename
-	//写入文件
 	videoId := snowflake.GenID()
-	saveFile := filepath.Join("./videosrv/", strconv.FormatInt(videoId, 10))
-	if err := c.SaveUploadedFile(data, saveFile); err != nil {
-		zap.L().Error("video fail", zap.Error(err))
-		io.ResponseError(c, common.CodeSaveFileErr)
-		return
-	}
 	//更新缓存和数据库
 	err = publishsrv.SaveVideoIm(name, MyClaims.UserID, videoId, c)
 	if err != nil {
@@ -44,4 +37,12 @@ func PublishActionHandler(c *gin.Context) {
 		io.ResponseError(c, common.CodeVideoImFail)
 		return
 	}
+	//写入文件
+	saveFile := filepath.Join("./videosrv/", strconv.FormatInt(videoId, 10))
+	if err := c.SaveUploadedFile(data, saveFile); err != nil {
+		zap.L().Error("video fail", zap.Error(err))
+		io.ResponseError(c, common.CodeSaveFileErr)
+		return
+	}
+	io.ResponseSuccessVideoAction(c)
 }

@@ -1,8 +1,8 @@
 package myredis
 
 import (
-	"tiktok/setting"
 	"fmt"
+	"tiktok/setting"
 
 	"github.com/go-redis/redis"
 )
@@ -26,6 +26,7 @@ func Init(cfg *setting.RedisConfig) (err error) {
 	if err != nil {
 		return err
 	}
+	SetVideoListInit()
 	return nil
 }
 

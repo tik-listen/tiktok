@@ -72,3 +72,9 @@ func ResponseSuccess4Login(c *gin.Context, token string) {
 		Token:    token,
 	})
 }
+func ResponseSuccessVideoAction(c *gin.Context) {
+	c.JSON(http.StatusOK, &Response{
+		StatusCode: 0,
+		StatusMsg:  "上传成功",
+	})
+}
