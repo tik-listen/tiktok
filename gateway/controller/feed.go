@@ -1,13 +1,6 @@
 package controller
 
-import (
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
-	"tiktok/base/common"
-	"tiktok/base/io"
-	"tiktok/base/jwt"
-)
-
+/*
 func FeedHandler(c *gin.Context) {
 	last_time := c.PostForm("last_time")
 	token := c.PostForm("token")
@@ -33,4 +26,4 @@ func FeedHandler(c *gin.Context) {
 		return "timevideo"
 	}
 
-}
+}*/
