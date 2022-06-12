@@ -15,7 +15,7 @@ type Relation struct {
 
 func InsertRelation(c *gin.Context, relation Relation) error {
 	db := mymysql.GetDB(c)
-	err := db.Table("relation").Create(relation).Error
+	err := db.Table("relations").Create(relation).Error
 	if err != nil {
 		return common.ErrorMysqlDbErr
 	}
@@ -24,22 +24,22 @@ func InsertRelation(c *gin.Context, relation Relation) error {
 
 func DeleteRelation(c *gin.Context, relation Relation) error {
 	db := mymysql.GetDB(c)
-	err := db.Table("relation").Delete("user_id=? and to_user_id =?", relation.UserID, relation.ToUserID).Error
+	err := db.Where("user_id = ? and to_user_id = ?", relation.UserID, relation.ToUserID).Delete(Relation{}).Error
 	if err != nil {
-		return common.ErrorDBError
+		return err
 	}
 	return nil
 }
 
 func FindUserFans(c *gin.Context, userid int64) (relations []Relation, err error) {
 	db := mymysql.GetDB(c)
-	err = db.Table("relation").Where("to_user_id=?", userid).Find(relations).Error
+	err = db.Table("relations").Where("to_user_id=?", userid).Find(relations).Error
 	return relations, err
 }
 
 func FindUserStar(c *gin.Context, userid int64) (relations []Relation, err error) {
 	db := mymysql.GetDB(c)
-	err = db.Table("relation").Where("user_id=?", userid).Find(relations).Error
+	err = db.Table("relations").Where("user_id=?", userid).Find(relations).Error
 	return relations, err
 }
 
@@ -48,7 +48,7 @@ func CountUserFans(c *gin.Context, userid int64) (int64, error) {
 	db := mymysql.GetDB(c)
 	var count int64 = 0
 	//select count(*) from relation where to_user_id = user_id
-	err := db.Table("relation").Where("to_user_id=?", userid).Count(&count).Error
+	err := db.Table("relations").Where("to_user_id=?", userid).Count(&count).Error
 	return count, err
 }
 
@@ -57,13 +57,13 @@ func CountUserStar(c *gin.Context, userid int64) (int64, error) {
 	db := mymysql.GetDB(c)
 	var count int64 = 0
 	//select count(*) from relation where user_id = user_id
-	err := db.Table("relation").Where("user_id=?", userid).Count(&count).Error
+	err := db.Table("relations").Where("user_id=?", userid).Count(&count).Error
 	return count, err
 }
 func IsFans(c *gin.Context, userid, touserid int64) (bool, error) {
 	db := mymysql.GetDB(c)
 	var count int64 = 0
 	//select count(*) from relation where user_id = user_id
-	err := db.Table("relation").Where("user_id=? and to_user_id=?", userid, touserid).Count(&count).Error
+	err := db.Table("relations").Where("user_id=? and to_user_id=?", userid, touserid).Count(&count).Error
 	return count != 0, err
 }

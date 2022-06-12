@@ -99,13 +99,17 @@ func UserInfo(c *gin.Context) {
 	}
 	//2. 服务调用
 	//目前是直接调用模块的 logic 功能
-	resp, err := logic.GetUserInfo(c, p, claim)
+	userResp, err := logic.GetUserInfo(c, p, claim)
 	if err != nil {
 		io.ResponseError(c, common.CodeInvalidLoginInfo)
 		return
 	}
+	resp := io.UserInfoResp{
+		Response: io.Response{StatusCode: 0, StatusMsg: "success"},
+		User:     *userResp,
+	}
 
 	// 3. 返回成功响应
-	io.ResponseSuccessUserInfo(c, resp)
+	io.ResponseSuccessUserInfo(c, &resp)
 
 }

@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"fmt"
 	"tiktok/base/common"
 	"tiktok/base/io"
+	"tiktok/base/jwt"
 	"tiktok/service/usersrv/logic"
 
 	"github.com/gin-gonic/gin"
@@ -11,19 +11,22 @@ import (
 	"go.uber.org/zap"
 )
 
-// // RelationAction no practical effect, just check if token is valid
+// RelationAction no practical effect, just check if token is valid
 func RelationAction(c *gin.Context) {
 	r := new(io.ParamRealation)
 	if err := c.ShouldBindWith(r, binding.Form); err != nil {
 		// 请求参数有误，直接返回响应
-		zap.L().Error("RealationAction with invalid param", zap.Error(err))
+		zap.L().Error("realation action with invalid param", zap.Error(err))
 		io.ResponseError(c, common.CodeInvalidParam)
 		return
 	}
-	fmt.Println("debug begin")
-	fmt.Println(r)
-	fmt.Println("debug end")
-	resp, err := logic.DealRelationAction(c, r)
+	// 登录校验,解析 token 里的参数
+	claim, err := jwt.ParseToken(r.Token)
+	if err != nil {
+		io.ResponseError(c, common.CodeNeedLogin)
+		return
+	}
+	resp, err := logic.DealRelationAction(c, r, claim)
 	if err != nil {
 		io.ResponseError(c, common.CodeInvalidParam)
 		return

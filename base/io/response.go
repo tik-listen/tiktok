@@ -10,7 +10,7 @@ import (
 
 type Response struct {
 	StatusCode common.ResCode `json:"status_code"`
-	StatusMsg  string         `json:"status_msg,omitempty"`
+	StatusMsg  string         `json:"status_msg"`
 }
 
 type FeedResponse struct {
@@ -52,7 +52,7 @@ type UserResponse struct {
 }
 type RelationResponse struct {
 	Response
-	UserList []UserInfoResp `json:"user_list"`
+	UserList []User `json:"user_list"`
 }
 
 // ResponseData 通用的响应内容
@@ -72,7 +72,7 @@ func ResponseError(c *gin.Context, code common.ResCode) {
 // UserInfoResp 用户信息返回值
 type UserInfoResp struct {
 	Response
-	User
+	User User `json:"user"`
 }
 
 // ResponseSuccess4Login 登录成功
