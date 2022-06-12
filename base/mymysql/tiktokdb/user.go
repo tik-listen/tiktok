@@ -2,13 +2,9 @@ package tiktokdb
 
 import (
 	"context"
-	"crypto/md5"
-	"encoding/hex"
 	"errors"
 	"tiktok/base/mymysql"
 )
-
-const secret = "先暂时写死"
 
 // User 用户
 type User struct {
@@ -70,4 +66,3 @@ func GetOneUserWithId(ctx context.Context, id int64) (User, error) {
 	}
 	return res, nil
 }
-
