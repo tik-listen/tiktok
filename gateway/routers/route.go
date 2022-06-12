@@ -58,7 +58,7 @@ func registerRouter(r *gin.Engine) {
 		apiRouter.POST("/user/login/", controller.LoginHandler)
 
 		// 视频流接口 with 鉴权
-		apiRouter.GET("/feed/")
+		apiRouter.GET("/feed/", controller.FeedHandler)
 
 		// 获取用户信息接口
 		apiRouter.GET("/user/")
