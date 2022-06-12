@@ -8,3 +8,11 @@ import (
 func InsertComment(c *gin.Context, comment *tiktokdb.Comment) error {
 	return tiktokdb.InsertOneComment(c, comment)
 }
+
+func DeleteComment(c *gin.Context, cid int64) error {
+	return tiktokdb.DeleteOneComment(c, cid)
+}
+
+func CheckCommentExist(c *gin.Context, cid int64) (flag bool, err error) {
+	return tiktokdb.CheckCommentExist(c, cid)
+}

@@ -39,7 +39,7 @@ func CommentHandler(c *gin.Context, p *io.ParamComment, data *io.CommentActionRe
 			return err
 		}
 	} else {
-		data, err = DelComment(c, p)
+		err = DelComment(c, p.CommentId)
 		if err != nil {
 			zap.L().Error("DelComment(c,p) failed ", zap.Error(err))
 			return err
@@ -67,6 +67,20 @@ func AddComment(c *gin.Context, p *io.ParamComment, data *io.CommentActionRespon
 	return models.InsertComment(c, comment)
 }
 
-func DelComment(c *gin.Context, p *io.ParamComment) (data *io.CommentActionResponse, err error) {
-	return
+func DelComment(c *gin.Context, cid int64) (err error) {
+	// 判断是否存在
+	// 1.判断用户存不存在
+	flag, err := models.CheckCommentExist(c, cid)
+	if err != nil {
+		return common.ErrorMysqlDbErr
+	}
+	if !flag {
+		return common.ErrorCommentNotExist
+	}
+
+	// 判断cid是否等于用户id
+	if cid != id {
+		return common.ErrorCommentNotEquUser
+	}
+	return models.DeleteComment(c, cid)
 }

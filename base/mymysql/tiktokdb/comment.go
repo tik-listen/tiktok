@@ -19,3 +19,23 @@ func InsertOneComment(c *gin.Context, comment *Comment) (err error) {
 	db.Table("comments").Create(comment)
 	return
 }
+
+func DeleteOneComment(c *gin.Context, cid int64) (err error) {
+	db := mymysql.GetDB(c)
+	db.Delete(&Comment{}, cid)
+	return
+}
+func CheckCommentExist(c *gin.Context, cid int64) (flag bool, err error) {
+	// 获取数据库连接
+	db := mymysql.GetDB(c)
+
+	var count int64
+	if result := db.Table("comments").Where("comment_id = ?", cid).Count(&count); result.Error != nil {
+		return true, result.Error
+	}
+	if count > 0 {
+		return true, nil
+	}
+
+	return false, nil
+}

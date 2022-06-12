@@ -48,6 +48,9 @@ import (
 // 	})
 // }
 
+const MsgSuccess = "操作成功"
+const MsgFailed = "操作失败"
+
 // CommentHandler 新增评论
 func CommentHandler(c *gin.Context) {
 	// 获取参数
@@ -66,6 +69,9 @@ func CommentHandler(c *gin.Context) {
 	}
 	// 逻辑处理
 	data := new(io.CommentActionResponse)
+	// 默认评论失败
+	data.StatusCode = 1
+	data.StatusMsg = MsgFailed
 	err := logic.CommentHandler(c, p, data)
 
 	if err != nil {
@@ -73,5 +79,7 @@ func CommentHandler(c *gin.Context) {
 		io.ResponseError(c, common.CodeServerBusy)
 		return
 	}
+	data.StatusCode = 0
+	data.StatusMsg = MsgSuccess
 	c.JSON(http.StatusOK, &data)
 }
