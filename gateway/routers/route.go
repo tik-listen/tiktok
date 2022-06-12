@@ -63,7 +63,7 @@ func registerRouter(r *gin.Engine) {
 		// 获取用户信息接口
 		apiRouter.GET("/user/", controller.UserInfo).Use(middlewares.JWTAuthMiddleware())
 
-		// 发布相关路由组 with 鉴权
+		// 发布相关路由组 with 鉴权/*
 		publish := apiRouter.Group("/publish").Use(middlewares.JWTAuthMiddleware())
 		{
 			// 发布操作
@@ -94,9 +94,9 @@ func registerRouter(r *gin.Engine) {
 		// 关系相关路由组 with 鉴权
 		relation := apiRouter.Group("/relation")
 		{
-			relation.POST("/action/")
-			relation.GET("/follower/list/")
-			relation.GET("/follow/list/")
+			relation.POST("/action/", controller.RelationAction)
+			relation.GET("/follower/list/", controller.FollowerList)
+			relation.GET("/follow/list/", controller.FollowList)
 		}
 	}
 

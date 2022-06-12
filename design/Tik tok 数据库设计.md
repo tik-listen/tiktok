@@ -31,3 +31,10 @@
 | play_url    | PlayUrl          | 视频播放地址 |
 | cover_url   | CoverUrl         | 视频封面地址 |
 |             |                  |              |
+
+### relation
+| 数据库字段  | 服务端结构体字段 | Description  |
+| ----------- | ---------------- | ------------ |
+|relation_id  |RelationID        |主键
+| user_id     | UserID           | 用户         |
+| to_user_id  | ToUserID         | 喜欢用户     |

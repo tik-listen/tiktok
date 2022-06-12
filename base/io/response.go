@@ -1,10 +1,11 @@
 package io
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"tiktok/base/common"
 	"tiktok/base/mymysql/tiktokdb"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Response struct {
@@ -49,6 +50,10 @@ type UserResponse struct {
 	Response
 	User tiktokdb.User `json:"user"`
 }
+type RelationResponse struct {
+	Response
+	UserList []UserInfoResp `json:"user_list"`
+}
 
 // ResponseData 通用的响应内容
 type ResponseData struct {
@@ -86,5 +91,11 @@ func ResponseSuccess4Login(c *gin.Context, token string) {
 
 // ResponseSuccessUserInfo 返回用户信息
 func ResponseSuccessUserInfo(c *gin.Context, resp *UserInfoResp) {
+	c.JSON(http.StatusOK, resp)
+}
+func RetResponse(c *gin.Context, resp *Response) {
+	c.JSON(http.StatusOK, resp)
+}
+func RetRelationResponse(c *gin.Context, resp *RelationResponse) {
 	c.JSON(http.StatusOK, resp)
 }

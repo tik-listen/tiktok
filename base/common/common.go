@@ -2,6 +2,7 @@ package common
 
 import (
 	"errors"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,6 +20,7 @@ var (
 	ErrorUserExist       = errors.New("用户已存在")
 	ErrorDBError         = errors.New("数据库错误")
 	ErrorInvalidPassword = errors.New("密码错误，无效的查询")
+	ErrorInvalid         = errors.New("参数错误")
 )
 
 func getCurrentUserID(c *gin.Context) (userID int64, err error) {

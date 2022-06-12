@@ -46,6 +46,13 @@ type ParamComment struct {
 	CommentId   int64  `form:"comment_id" binding:"required"`
 }
 
+type ParamRealation struct {
+	UserID     int64  `form:"user_id" binding:"required"`
+	Token      string `form:"token" binding:"required"`
+	ToUserID   int64  `form:"to_user_id" binding:"required"`
+	ActionType int32  `form:"action_type" binding:"required"`
+}
+
 // getCurrentUserID: Get the user id, who in login state
 func getCurrentUserID(c *gin.Context) (userID int64, err error) {
 	uid, ok := c.Get(common.KCtxUserIDKey)
