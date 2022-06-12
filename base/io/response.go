@@ -35,8 +35,7 @@ type FeedResponse struct {
 
 type VideoListResponse struct {
 	Response
-	VideoList []VideoRes `json:"video_list"`
-	Time      int64      `json:"next_time"`
+	VideoList []tiktokdb.Video `json:"video_list"`
 }
 
 type CommentListResponse struct {
@@ -46,6 +45,7 @@ type CommentListResponse struct {
 
 // CommentActionResponse 评论返回值
 type CommentActionResponse struct {
+	UserInfoReq
 	Response
 	Comment tiktokdb.Comment `json:"comment,omitempty"`
 }
@@ -89,6 +89,10 @@ type UserInfoResp struct {
 	Response
 	User User `json:"user"`
 }
+type FavoriteListResp struct {
+	Response
+	VideoList []tiktokdb.Video `json:"video_list"`
+}
 
 // ResponseSuccess4Login 登录成功
 func ResponseSuccess4Login(c *gin.Context, token string) {
@@ -108,6 +112,9 @@ func RetResponse(c *gin.Context, resp *Response) {
 	c.JSON(http.StatusOK, resp)
 }
 func RetRelationResponse(c *gin.Context, resp *RelationResponse) {
+	c.JSON(http.StatusOK, resp)
+}
+func RetFavoriteListReponse(c *gin.Context, resp *FavoriteListResp) {
 	c.JSON(http.StatusOK, resp)
 }
 

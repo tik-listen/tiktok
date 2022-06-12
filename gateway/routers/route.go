@@ -81,7 +81,7 @@ func registerRouter(r *gin.Engine) {
 			favorite.POST("/action/", controller.VideoLikeAction)
 
 			// 查看点赞记录操作
-			favorite.GET("/list/")
+			favorite.GET("/list/", controller.VideoLikeList)
 		}
 
 		// 评论相关路由组 with 鉴权
