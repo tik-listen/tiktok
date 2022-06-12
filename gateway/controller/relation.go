@@ -40,9 +40,6 @@ func FollowList(c *gin.Context) {
 		io.ResponseError(c, common.CodeInvalidParam)
 		return
 	}
-	fmt.Println("debug begin")
-	fmt.Println(r)
-	fmt.Println("debug end")
 	resp, err := logic.FindFollweList(c, r)
 	if err != nil {
 		io.ResponseError(c, common.CodeInvalidParam)
@@ -60,9 +57,6 @@ func FollowerList(c *gin.Context) {
 		io.ResponseError(c, common.CodeInvalidParam)
 		return
 	}
-	fmt.Println("debug begin")
-	fmt.Println(r)
-	fmt.Println("debug end")
 	resp, err := logic.FindFollwerList(c, r)
 	if err != nil {
 		io.ResponseError(c, common.CodeInvalidParam)

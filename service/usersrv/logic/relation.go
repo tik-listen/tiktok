@@ -3,6 +3,7 @@ package logic
 import (
 	"tiktok/base/common"
 	"tiktok/base/io"
+	"tiktok/base/jwt"
 	"tiktok/base/snowflake"
 	"tiktok/service/usersrv/models"
 
@@ -10,7 +11,8 @@ import (
 )
 
 func DealRelationAction(c *gin.Context, relation *io.ParamRealation) (*io.Response, error) {
-	if relation.ActionType == 1 { //生成一个雪花id
+	if relation.ActionType == 1 {
+		//生成一个雪花id
 		relationID := snowflake.GenID()
 		r := models.Relation{RelationID: relationID, UserID: relation.UserID, ToUserID: relation.ToUserID}
 		status := models.InsertRelation(c, r)
@@ -18,7 +20,7 @@ func DealRelationAction(c *gin.Context, relation *io.ParamRealation) (*io.Respon
 	} else if relation.ActionType == 2 {
 		r := models.Relation{UserID: relation.UserID, ToUserID: relation.ToUserID}
 		status := models.DeleteRelation(c, r)
-		return &io.Response{StatusCode: common.CodeSuccess, StatusMsg: "关注成功"}, status
+		return &io.Response{StatusCode: common.CodeSuccess, StatusMsg: "取消关注成功"}, status
 	} else {
 		return nil, common.ErrorInvalid
 	}
@@ -34,9 +36,13 @@ func FindFollweList(c *gin.Context, r *io.UserInfoReq) (*io.RelationResponse, er
 	ret.Response.StatusMsg = "success"
 	ret.UserList = make([]io.UserInfoResp, len(relations))
 	//找到关注列表信息，所以应该是ToUserInfo
+	myclas, err := jwt.ParseToken(r.Token)
+	if err != nil {
+		return &io.RelationResponse{}, err
+	}
 	for _, relation := range relations {
 		user := relation.ToUserID
-		userinfo, err := GetUserInfo(c, &io.UserInfoReq{UserID: user, Token: r.Token})
+		userinfo, err := GetUserInfo(c, &io.UserInfoReq{UserID: user, Token: r.Token}, myclas)
 		if err != nil {
 			return ret, err
 		}
@@ -56,9 +62,13 @@ func FindFollwerList(c *gin.Context, r *io.UserInfoReq) (*io.RelationResponse, e
 	ret.Response.StatusMsg = "success"
 	ret.UserList = make([]io.UserInfoResp, len(relations))
 	//找到我的粉丝 所以应该是UserID
+	myclas, err := jwt.ParseToken(r.Token)
+	if err != nil {
+		return &io.RelationResponse{}, err
+	}
 	for _, relation := range relations {
 		user := relation.UserID
-		userinfo, err := GetUserInfo(c, &io.UserInfoReq{UserID: user, Token: r.Token})
+		userinfo, err := GetUserInfo(c, &io.UserInfoReq{UserID: user, Token: r.Token}, myclas)
 		if err != nil {
 			return ret, err
 		}
