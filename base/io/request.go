@@ -38,12 +38,11 @@ type LikeActionReq struct {
 
 // ParamComment 评论相关参数
 type ParamComment struct {
-	UserId      int64  `form:"user_id" binding:"required"`
 	Token       string `form:"token" binding:"required"`
 	VideoId     int64  `form:"video_id" binding:"required"`
 	ActionType  int64  `form:"action_type" binding:"required"`
-	CommentText string `form:"comment_text" binding:"required"`
-	CommentId   int64  `form:"comment_id" binding:"required"`
+	CommentText string `form:"comment_text"`
+	CommentId   int64  `form:"comment_id"`
 }
 
 type ParamRealation struct {
