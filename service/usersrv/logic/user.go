@@ -74,7 +74,7 @@ func Login(p *io.ParamLogin) (userId int64, token string, err error) {
 //	return resp, nil
 //}
 
-// GetUserInfo TODO:未实现,在上面
+// GetUserInfo 查询用户信息
 func GetUserInfo(ctx *gin.Context, p *io.UserInfoReq, claim *jwt.MyClaims) (resp *io.UserInfoResp, err error) {
 
 	resp = new(io.UserInfoResp)
