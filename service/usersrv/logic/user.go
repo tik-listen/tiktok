@@ -103,6 +103,10 @@ func GetUserInfo(ctx *gin.Context, p *io.UserInfoReq, claim *jwt.MyClaims) (resp
 	}
 	resp.FollowCount = followCount
 
-	// TODO:获取是否已经关注
+	// 获取是否已经关注
+	resp.IsFollow, err = models.IsFans(ctx, claim.UserID, p.UserID)
+	if err != nil {
+		return nil, err
+	}
 	return
 }
