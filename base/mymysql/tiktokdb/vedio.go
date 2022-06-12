@@ -49,3 +49,14 @@ func GetVideoListWithTime(c *gin.Context, now time.Time) ([]Video, error) {
 	}
 	return res, nil
 }
+
+// GetVideoListWithId  根据用户id获取投稿视频
+func GetVideoListWithId(c *gin.Context, id int64) ([]Video, error) {
+	db := mymysql.GetDB(c)
+	var res []Video
+	err := db.Table("video").Where("user_id = ?", id).Limit(10).Find(&res)
+	if err.Error != nil {
+		return nil, errors.New("MySQL ERR")
+	}
+	return res, nil
+}

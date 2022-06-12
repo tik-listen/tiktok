@@ -22,6 +22,10 @@ type VideoRes struct {
 	IsFavorite    bool          `json:"is_favorite" db:"is_favorite"`
 	Name          string        `json:"title" db:"name"`
 }
+type VideoPublishList struct {
+	Response
+	VideoList []VideoRes `json:"video_list"`
+}
 type FeedResponse struct {
 	Response
 	VideoList []VideoRes `json:"video_list,omitempty"`
@@ -31,7 +35,7 @@ type FeedResponse struct {
 type VideoListResponse struct {
 	Response
 	VideoList []VideoRes `json:"video_list"`
-	time      int64      `json:"next_time"`
+	Time      int64      `json:"next_time"`
 }
 
 type CommentListResponse struct {
@@ -115,6 +119,29 @@ func ResponseSuccessVideoList(c *gin.Context, videoList []tiktokdb.Video) {
 			StatusMsg:  "获取成功",
 		},
 		VideoList: res,
-		time:      time,
+		Time:      time,
+	})
+}
+
+// ResponseSuccessPublishList 获取投稿视频成功
+func ResponseSuccessPublishList(c *gin.Context, videoList []tiktokdb.Video) {
+	n := len(videoList)
+	var res = make([]VideoRes, n)
+	for i := 0; i < n; i++ {
+		res[i].Id = videoList[i].VideoId
+		res[i].User, _ = tiktokdb.GetOneUserWithId(c, videoList[i].UserId)
+		res[i].PlayUrl = "http://82.157.141.199/" + strconv.FormatInt(videoList[i].VideoId, 10) + ".mp4"
+		res[i].FavoriteCount = videoList[i].FavoriteCount
+		res[i].CommentCount = videoList[i].FavoriteCount
+		res[i].IsFavorite = videoList[i].IsFavorite
+		res[i].Name = videoList[i].Name
+
+	}
+	c.JSON(http.StatusOK, &VideoListResponse{
+		Response: Response{
+			StatusCode: 0,
+			StatusMsg:  "获取成功",
+		},
+		VideoList: res,
 	})
 }

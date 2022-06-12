@@ -8,6 +8,7 @@ import (
 	"tiktok/base/common"
 	"tiktok/base/io"
 	"tiktok/base/jwt"
+	"tiktok/base/mymysql/tiktokdb"
 	"tiktok/base/snowflake"
 	"tiktok/service/publishsrv"
 )
@@ -45,4 +46,27 @@ func PublishActionHandler(c *gin.Context) {
 		return
 	}
 	io.ResponseSuccessVideoAction(c)
+}
+func PublishListHandler(c *gin.Context) {
+	token := c.PostForm("token")
+	_, err := jwt.ParseToken(token)
+	if err != nil {
+		zap.L().Error("token is invalid", zap.Error(err))
+		io.ResponseError(c, common.CodeTokenCreateErr)
+		return
+	}
+	userId := c.PostForm("id")
+	id, err := strconv.ParseInt(userId, 10, 64)
+	if err != nil {
+		zap.L().Error("get id err", zap.Error(err))
+		io.ResponseError(c, common.CodeInvalidParam)
+		return
+	}
+	videoList, err := tiktokdb.GetVideoListWithId(c, id)
+	if err != nil {
+		zap.L().Error("sql err", zap.Error(err))
+		io.ResponseError(c, common.CodeVideoImFail)
+		return
+	}
+	io.ResponseSuccessPublishList(c, videoList)
 }

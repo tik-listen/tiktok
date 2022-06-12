@@ -70,7 +70,7 @@ func registerRouter(r *gin.Engine) {
 			publish.POST("/action", controller.PublishActionHandler)
 
 			// 查看发布记录操作
-			publish.GET("/list/")
+			publish.GET("/list/", controller.PublishListHandler)
 
 		}
 

@@ -1,11 +1,9 @@
 package controller
 
 import (
-	"fmt"
 	"tiktok/base/common"
 	"tiktok/base/io"
 	"tiktok/base/jwt"
-	"tiktok/base/logger"
 	"tiktok/service/usersrv/logic"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +17,7 @@ func RegisterHandler(c *gin.Context) {
 	p := new(io.ParamRegister)
 	p.Username = c.PostForm("username")
 	p.Password = c.PostForm("password")
-	logger.Fdebug(fmt.Sprint(p))
+	//logger.Fdebug(fmt.Sprint(p))
 
 	// 2. 服务调用
 	// 目前是直接调用模块的 logic 功能
@@ -47,7 +45,7 @@ func LoginHandler(c *gin.Context) {
 	p := new(io.ParamLogin)
 	p.Username = c.PostForm("username")
 	p.Password = c.PostForm("password")
-	logger.Fdebug(fmt.Sprint(p))
+	//logger.Fdebug(fmt.Sprint(p))
 
 	// 2. 服务调用
 	// 目前是直接调用模块的 logic 功能
