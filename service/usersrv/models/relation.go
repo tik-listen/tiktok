@@ -43,7 +43,7 @@ func FindUserStar(c *gin.Context, userid int64) (relations []Relation, err error
 	return relations, err
 }
 
-//获取用户的粉丝数
+// CountUserFans 获取用户的粉丝数
 func CountUserFans(c *gin.Context, userid int64) (int64, error) {
 	db := mymysql.GetDB(c)
 	var count int64 = 0
@@ -52,7 +52,7 @@ func CountUserFans(c *gin.Context, userid int64) (int64, error) {
 	return count, err
 }
 
-//获取用户的关注数
+// CountUserStar 获取用户的关注数
 func CountUserStar(c *gin.Context, userid int64) (int64, error) {
 	db := mymysql.GetDB(c)
 	var count int64 = 0

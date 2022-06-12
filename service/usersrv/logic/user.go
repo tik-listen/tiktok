@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/gin-gonic/gin"
 	"tiktok/base/common"
 	"tiktok/base/io"
 	"tiktok/base/jwt"
@@ -64,7 +65,7 @@ func Login(p *io.ParamLogin) (userId int64, token string, err error) {
 //	//if !flag {
 //	//	return nil, common.ErrorUserNotExist
 //	//}
-//	// TODO: 获取各种信息粉丝和关注信息
+//	//
 //	resp.ID = 1233
 //	resp.FollowerCount = 0
 //	resp.FollowCount = 0
@@ -74,13 +75,34 @@ func Login(p *io.ParamLogin) (userId int64, token string, err error) {
 //}
 
 // GetUserInfo TODO:未实现,在上面
-func GetUserInfo(ctx context.Context, p *io.UserInfoReq, claim *jwt.MyClaims) (resp *io.UserInfoResp, err error) {
+func GetUserInfo(ctx *gin.Context, p *io.UserInfoReq, claim *jwt.MyClaims) (resp *io.UserInfoResp, err error) {
 
 	resp = new(io.UserInfoResp)
-	resp.ID = claim.UserID
-	resp.FollowerCount = 10
-	resp.FollowCount = 10
-	resp.Name = claim.Username
-	resp.IsFollow = false
+	userInfo := &tiktokdb.User{
+		UserID: p.UserID,
+	}
+	resp.ID = p.UserID
+	// 查询用户信息
+	user, err := models.FindOneUser(ctx, userInfo)
+	if err != nil {
+		return nil, err
+	}
+	resp.Name = user.Username
+
+	// 获取用户的粉丝数
+	fansCount, err := models.CountUserFans(ctx, p.UserID)
+	if err != nil {
+		return nil, err
+	}
+	resp.FollowerCount = fansCount
+
+	// 获取用户关注数
+	followCount, err := models.CountUserStar(ctx, p.UserID)
+	if err != nil {
+		return nil, err
+	}
+	resp.FollowCount = followCount
+
+	// TODO:获取是否已经关注
 	return
 }

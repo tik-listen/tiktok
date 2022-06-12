@@ -91,7 +91,7 @@ func UserInfo(c *gin.Context) {
 		io.ResponseError(c, common.CodeInvalidParam)
 		return
 	}
-	// 登录校验
+	// 登录校验,解析 token 里的参数
 	claim, err := jwt.ParseToken(p.Token)
 	if err != nil {
 		io.ResponseError(c, common.CodeNeedLogin)

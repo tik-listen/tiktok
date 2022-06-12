@@ -57,14 +57,14 @@ func Login(username string, password string) (int64, error) {
 	return res.UserID, nil
 }
 
-//// FindOneUser 获取一个用户
-//func FindOneUser(ctx context.Context, user *tiktokdb.User) (*tiktokdb.User, error) {
-//
-//	//userInfo, err := tiktokdb.GetOneUser(ctx, user)
-//	//if err == nil {
-//	//	return err
-//	//}
-//	//
-//	//return nil
-//	return
-//}
+// FindOneUser 获取一个用户
+func FindOneUser(ctx context.Context, user *tiktokdb.User) (*tiktokdb.User, error) {
+
+	//userInfo, err := tiktokdb.GetOneUser(ctx, user)
+	//if err == nil {
+	//	return err
+	//}
+	//
+	//return nil
+	return
+}
