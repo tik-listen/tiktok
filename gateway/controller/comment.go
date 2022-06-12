@@ -102,7 +102,9 @@ func GetCommentList(c *gin.Context) {
 	// 逻辑处理
 	list, err := logic.GetCommentList(c, p)
 	if err != nil {
-
+		zap.L().Error("logic.GetCommentList(c, p) failed", zap.Error(err))
+		io.ResponseError(c, common.CodeServerBusy)
+		return
 	}
 	// 返回响应
 
