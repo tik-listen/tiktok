@@ -2,6 +2,7 @@ package common
 
 // ResCode int32
 type ResCode int32
+type Action int32
 
 const (
 	CodeSuccess          ResCode = 0
@@ -17,6 +18,10 @@ const (
 	CodeSaveFileErr      ResCode = 1011
 	CodeVideoImFail      ResCode = 1012
 	CodeGetVideoListErr  ResCode = 1013
+)
+const (
+	Add    Action = 1
+	Cancle Action = 2
 )
 
 var codeMsgMap = map[ResCode]string{

@@ -36,7 +36,6 @@ type FeedResponse struct {
 type VideoListResponse struct {
 	Response
 	VideoList []VideoRes `json:"video_list"`
-	Time      int64      `json:"next_time"`
 }
 
 type CommentListResponse struct {
@@ -46,6 +45,7 @@ type CommentListResponse struct {
 
 // CommentActionResponse 评论返回值
 type CommentActionResponse struct {
+	UserInfoReq
 	Response
 	Comment Comment `json:"comment,omitempty"`
 }
@@ -97,6 +97,10 @@ type UserInfoResp struct {
 	Response
 	User User `json:"user"`
 }
+type FavoriteListResp struct {
+	Response
+	VideoList []VideoRes `json:"video_list"`
+}
 
 // ResponseSuccess4Login 登录成功
 func ResponseSuccess4Login(c *gin.Context, token string) {
@@ -116,6 +120,9 @@ func RetResponse(c *gin.Context, resp *Response) {
 	c.JSON(http.StatusOK, resp)
 }
 func RetRelationResponse(c *gin.Context, resp *RelationResponse) {
+	c.JSON(http.StatusOK, resp)
+}
+func RetFavoriteListReponse(c *gin.Context, resp *FavoriteListResp) {
 	c.JSON(http.StatusOK, resp)
 }
 
@@ -152,13 +159,13 @@ func ResponseSuccessVideoList(c *gin.Context, videoList []tiktokdb.Video) {
 			time = videoList[i].Date
 		}
 	}
-	c.JSON(http.StatusOK, &VideoListResponse{
+	c.JSON(http.StatusOK, &FeedResponse{
 		Response: Response{
 			StatusCode: 0,
 			StatusMsg:  "获取成功",
 		},
 		VideoList: res,
-		Time:      time,
+		NextTime:  time,
 	})
 }
 
@@ -171,7 +178,7 @@ func ResponseSuccessPublishList(c *gin.Context, videoList []tiktokdb.Video) {
 		res[i].User, _ = tiktokdb.GetOneUserWithId(c, videoList[i].UserId)
 		res[i].PlayUrl = "http://82.157.141.199/" + strconv.FormatInt(videoList[i].VideoId, 10) + ".mp4"
 		res[i].FavoriteCount = videoList[i].FavoriteCount
-		res[i].CommentCount = videoList[i].FavoriteCount
+		res[i].CommentCount = videoList[i].CommentCount
 		res[i].IsFavorite = videoList[i].IsFavorite
 		res[i].Name = videoList[i].Name
 

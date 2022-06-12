@@ -31,9 +31,9 @@ type UserInfoReq struct {
 
 // LikeActionReq 点赞请求
 type LikeActionReq struct {
-	Token      string `form:"token" binding:"required"`
-	VideoID    int64  `form:"video_id" binding:"required"`
-	ActionType int32  `form:"action_type" binding:"required,oneof=0 1"`
+	Token      string        `form:"token" binding:"required"`
+	VideoID    int64         `form:"video_id" binding:"required"`
+	ActionType common.Action `form:"action_type" binding:"required,oneof=0 1"`
 }
 
 // ParamComment 评论相关参数
@@ -46,11 +46,9 @@ type ParamComment struct {
 }
 
 type ParamRealation struct {
-	Token      string `form:"token" binding:"required"`
-	ToUserID   int64  `form:"to_user_id" binding:"required"`
-	ActionType int32  `form:"action_type" binding:"required"`
-	Username string `form:"username" binding:"required,min=4,max=32"`
-	Password string `form:"password" binding:"required,min=6,max=32"`
+	Token      string        `form:"token" binding:"required"`
+	ToUserID   int64         `form:"to_user_id" binding:"required"`
+	ActionType common.Action `form:"action_type" binding:"required"`
 }
 
 // FeedRequest 请求视频流

@@ -26,11 +26,8 @@
 | 数据库字段  | 服务端结构体字段 | Description  |
 | ----------- | ---------------- | ------------ |
 | favorite_id | Favorite_id      | 主键         |
-| user_id     | UserID           | 视频作者     |
-| title       | Title            | 视频标题     |
-| play_url    | PlayUrl          | 视频播放地址 |
-| cover_url   | CoverUrl         | 视频封面地址 |
-|             |                  |              |
+| user_id     | UserID           | 用户id       |
+| video_id    | video_id         | 视频id       |
 
 ### relation
 | 数据库字段  | 服务端结构体字段 | Description  |
