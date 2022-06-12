@@ -40,14 +40,22 @@ type VideoListResponse struct {
 
 type CommentListResponse struct {
 	Response
-	CommentList []tiktokdb.Comment `json:"comment_list,omitempty"`
+	CommentList []Comment `json:"comment_list,omitempty"`
 }
 
 // CommentActionResponse 评论返回值
 type CommentActionResponse struct {
 	UserInfoReq
 	Response
-	Comment tiktokdb.Comment `json:"comment,omitempty"`
+	Comment Comment `json:"comment,omitempty"`
+}
+
+// Comment 评论
+type Comment struct {
+	Id         int64  `json:"id,omitempty"`
+	User       User   `json:"user"`
+	Content    string `json:"content,omitempty"`
+	CreateDate string `json:"create_date,omitempty"`
 }
 
 type UserListResponse struct {
