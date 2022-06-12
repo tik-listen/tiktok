@@ -39,3 +39,8 @@ func CheckCommentExist(c *gin.Context, cid int64) (flag bool, err error) {
 
 	return false, nil
 }
+func FindCommentList(c *gin.Context, vid int64) (clist []Comment, err error) {
+	db := mymysql.GetDB(c)
+	err = db.Table("comments").Where("video_id=?", vid).Find(&clist).Error
+	return clist, err
+}

@@ -30,6 +30,10 @@ func CommentHandler(c *gin.Context, p *io.ParamComment, data *io.CommentActionRe
 	userInfoRep := new(io.UserInfoReq)
 	userInfoRep.UserID = id
 	userResp, err := logic.GetUserInfo(c, userInfoRep, claim)
+	if err != nil {
+		zap.L().Error("logic.GetUserInfo(c, userInfoRep, claim) failed", zap.Error(err))
+		return
+	}
 	data.Comment.User = *userResp
 	// 判断是删除评论还是添加评论
 	if p.ActionType == addComment {
@@ -48,6 +52,7 @@ func CommentHandler(c *gin.Context, p *io.ParamComment, data *io.CommentActionRe
 	return
 }
 
+// AddComment 添加评论
 func AddComment(c *gin.Context, p *io.ParamComment, data *io.CommentActionResponse) (err error) {
 	// 生成评论id
 	commentID := snowflake.GenID()
@@ -67,6 +72,7 @@ func AddComment(c *gin.Context, p *io.ParamComment, data *io.CommentActionRespon
 	return models.InsertComment(c, comment)
 }
 
+// DelComment 删除评论
 func DelComment(c *gin.Context, cid int64) (err error) {
 	// 判断是否存在
 	// 1.判断用户存不存在
@@ -83,4 +89,37 @@ func DelComment(c *gin.Context, cid int64) (err error) {
 		return common.ErrorCommentNotEquUser
 	}
 	return models.DeleteComment(c, cid)
+}
+
+func GetCommentList(c *gin.Context, p *io.ParmaCommentList) (list *io.CommentListResponse, err error) {
+	clist, err := models.FindCommentList(c, p.VideoId)
+	list = new(io.CommentListResponse)
+	if err != nil {
+		return list, err
+	}
+	claim, err := jwt.ParseToken(p.Token)
+	if err != nil {
+		io.ResponseError(c, common.CodeNeedLogin)
+		return
+	}
+	list.Response.StatusCode = common.CodeSuccess
+	list.Response.StatusMsg = "success"
+	list.CommentList = make([]io.Comment, 0)
+	for _, comment := range clist {
+		tempComment := new(io.Comment)
+		tempComment.Id = comment.CommentID
+		tempComment.Content = comment.Content
+		tempComment.CreateDate = comment.CreateTime.Format("01-02")
+
+		userInfoRep := new(io.UserInfoReq)
+		userInfoRep.UserID = comment.UserID
+		userResp, err := logic.GetUserInfo(c, userInfoRep, claim)
+		if err != nil {
+			zap.L().Error("logic.GetUserInfo(c, userInfoRep, claim) failed", zap.Error(err))
+			return nil, err
+		}
+		tempComment.User = *userResp
+		list.CommentList = append(list.CommentList, *tempComment)
+	}
+	return
 }
