@@ -31,6 +31,7 @@ type FeedResponse struct {
 type VideoListResponse struct {
 	Response
 	VideoList []VideoRes `json:"video_list"`
+	time      int64      `json:"next_time"`
 }
 
 type CommentListResponse struct {
@@ -95,6 +96,7 @@ func ResponseSuccessVideoAction(c *gin.Context) {
 func ResponseSuccessVideoList(c *gin.Context, videoList []tiktokdb.Video) {
 	n := len(videoList)
 	var res = make([]VideoRes, n)
+	time := int64(0)
 	for i := 0; i < n; i++ {
 		res[i].Id = videoList[i].VideoId
 		res[i].User, _ = tiktokdb.GetOneUserWithId(c, videoList[i].UserId)
@@ -103,6 +105,9 @@ func ResponseSuccessVideoList(c *gin.Context, videoList []tiktokdb.Video) {
 		res[i].CommentCount = videoList[i].FavoriteCount
 		res[i].IsFavorite = videoList[i].IsFavorite
 		res[i].Name = videoList[i].Name
+		if videoList[i].Date > time {
+			time = videoList[i].Date
+		}
 	}
 	c.JSON(http.StatusOK, &VideoListResponse{
 		Response: Response{
@@ -110,5 +115,6 @@ func ResponseSuccessVideoList(c *gin.Context, videoList []tiktokdb.Video) {
 			StatusMsg:  "获取成功",
 		},
 		VideoList: res,
+		time:      time,
 	})
 }
