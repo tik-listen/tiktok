@@ -1,0 +1,14 @@
+{"level":"INFO","time":"2022-06-11T21:08:49.920+0800","caller":"logger/logger.go:54","msg":"init logger success"}
+{"level":"INFO","time":"2022-06-11T21:08:50.538+0800","caller":"mymysql/mysql.go:31","msg":"init MySQL success:"}
+{"level":"INFO","time":"2022-06-11T21:09:26.805+0800","caller":"logger/logger.go:88","msg":"/douyin/user/register/","status":200,"method":"POST","path":"/douyin/user/register/","query":"","ip":"192.168.218.1","user-agent":"PostmanRuntime/7.26.8","errors":"","cost":0.441749383}
+{"level":"INFO","time":"2022-06-11T21:09:42.572+0800","caller":"logger/logger.go:88","msg":"/douyin/user/register/","status":200,"method":"POST","path":"/douyin/user/register/","query":"","ip":"192.168.218.1","user-agent":"PostmanRuntime/7.26.8","errors":"","cost":0.434035493}
+{"level":"INFO","time":"2022-06-11T21:15:44.782+0800","caller":"logger/logger.go:54","msg":"init logger success"}
+{"level":"INFO","time":"2022-06-11T21:15:45.110+0800","caller":"mymysql/mysql.go:31","msg":"init MySQL success:"}
+{"level":"ERROR","time":"2022-06-11T21:15:51.143+0800","caller":"controller/user.go:28","msg":"register failed","error":"用户已存在"}
+{"level":"INFO","time":"2022-06-11T21:15:51.143+0800","caller":"logger/logger.go:88","msg":"/douyin/user/register/","status":200,"method":"POST","path":"/douyin/user/register/","query":"","ip":"192.168.218.1","user-agent":"PostmanRuntime/7.26.8","errors":"","cost":0.113843395}
+{"level":"ERROR","time":"2022-06-11T21:16:16.894+0800","caller":"controller/user.go:50","msg":"Login with invalid param","error":"invalid character 'u' looking for beginning of value"}
+{"level":"INFO","time":"2022-06-11T21:16:16.896+0800","caller":"logger/logger.go:88","msg":"/douyin/user/login/","status":200,"method":"POST","path":"/douyin/user/login/","query":"","ip":"192.168.218.1","user-agent":"PostmanRuntime/7.26.8","errors":"","cost":0.00292158}
+{"level":"INFO","time":"2022-06-11T21:17:22.206+0800","caller":"logger/logger.go:54","msg":"init logger success"}
+{"level":"INFO","time":"2022-06-11T21:17:22.984+0800","caller":"mymysql/mysql.go:31","msg":"init MySQL success:"}
+{"level":"INFO","time":"2022-06-11T21:17:31.706+0800","caller":"logger/logger.go:88","msg":"/douyin/user/login/","status":200,"method":"POST","path":"/douyin/user/login/","query":"","ip":"192.168.218.1","user-agent":"PostmanRuntime/7.26.8","errors":"","cost":0.095886776}
+{"level":"INFO","time":"2022-06-11T21:18:56.639+0800","caller":"logger/logger.go:88","msg":"/douyin/user/login/","status":200,"method":"POST","path":"/douyin/user/login/","query":"","ip":"192.168.218.1","user-agent":"PostmanRuntime/7.26.8","errors":"","cost":0.112097792}

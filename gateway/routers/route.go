@@ -52,13 +52,13 @@ func registerRouter(r *gin.Engine) {
 	apiRouter := r.Group("/douyin")
 	{
 		// 注册接口
-		apiRouter.GET("/user/register/", controller.RegisterHandler)
+		apiRouter.POST("/user/register/", controller.RegisterHandler)
 
 		// 登录接口
-		apiRouter.GET("/user/login/", controller.LoginHandler)
+		apiRouter.POST("/user/login/", controller.LoginHandler)
 
 		// 视频流接口 with 鉴权
-		apiRouter.GET("/feed/", controller.FeedHandler)
+		apiRouter.GET("/feed/")
 
 		// 获取用户信息接口
 		apiRouter.GET("/user/")

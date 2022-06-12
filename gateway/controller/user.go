@@ -1,13 +1,15 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
-	"go.uber.org/zap"
+	"fmt"
 	"tiktok/base/common"
 	"tiktok/base/io"
 	"tiktok/base/jwt"
+	"tiktok/base/logger"
 	"tiktok/service/usersrv/logic"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // RegisterHandler 处理注册请求的函数
@@ -15,18 +17,9 @@ func RegisterHandler(c *gin.Context) {
 
 	// 1. 获取参数和参数校验
 	p := new(io.ParamRegister)
-	if err := c.ShouldBindJSON(p); err != nil {
-		// 请求参数有误，直接返回响应
-		zap.L().Error("register with invalid param", zap.Error(err))
-		// 判断err是不是validator.ValidationErrors 类型
-		errors := err.(validator.ValidationErrors)
-		if errors != nil {
-			// 返回参数错误响应
-			io.ResponseError(c, common.CodeInvalidParam)
-			return
-		}
-		return
-	}
+	p.Username = c.PostForm("username")
+	p.Password = c.PostForm("password")
+	logger.Fdebug(fmt.Sprint(p))
 
 	// 2. 服务调用
 	// 目前是直接调用模块的 logic 功能
@@ -52,12 +45,9 @@ func LoginHandler(c *gin.Context) {
 
 	// 1. 获取参数和参数校验
 	p := new(io.ParamLogin)
-	if err := c.ShouldBindJSON(p); err != nil {
-		// 请求参数有误，直接返回响应
-		zap.L().Error("Login with invalid param", zap.Error(err))
-		io.ResponseError(c, common.CodeInvalidParam)
-		return
-	}
+	p.Username = c.PostForm("username")
+	p.Password = c.PostForm("password")
+	logger.Fdebug(fmt.Sprint(p))
 
 	// 2. 服务调用
 	// 目前是直接调用模块的 logic 功能
