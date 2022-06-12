@@ -42,3 +42,21 @@ func FindUserStar(c *gin.Context, userid int64) (relations []Relation, err error
 	err = db.Table("relation").Where("user_id=?", userid).Find(relations).Error
 	return relations, err
 }
+
+//获取用户的粉丝数
+func CountUserFans(c *gin.Context, userid int64) (int64, error) {
+	db := mymysql.GetDB(c)
+	var count int64 = 0
+	//select count(*) from relation where to_user_id = user_id
+	err := db.Table("relation").Where("to_user_id=?", userid).Count(&count).Error
+	return count, err
+}
+
+//获取用户的关注数
+func CountUserStar(c *gin.Context, userid int64) (int64, error) {
+	db := mymysql.GetDB(c)
+	var count int64 = 0
+	//select count(*) from relation where user_id = user_id
+	err := db.Table("relation").Where("user_id=?", userid).Count(&count).Error
+	return count, err
+}
