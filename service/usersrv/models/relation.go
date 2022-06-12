@@ -60,3 +60,10 @@ func CountUserStar(c *gin.Context, userid int64) (int64, error) {
 	err := db.Table("relation").Where("user_id=?", userid).Count(&count).Error
 	return count, err
 }
+func IsFans(c *gin.Context, userid, touserid int64) (bool, error) {
+	db := mymysql.GetDB(c)
+	var count int64 = 0
+	//select count(*) from relation where user_id = user_id
+	err := db.Table("relation").Where("user_id=? to_user_id=?", userid, touserid).Count(&count).Error
+	return count != 0, err
+}
