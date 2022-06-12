@@ -33,13 +33,13 @@ func DeleteRelation(c *gin.Context, relation Relation) error {
 
 func FindUserFans(c *gin.Context, userid int64) (relations []Relation, err error) {
 	db := mymysql.GetDB(c)
-	err = db.Table("relations").Where("to_user_id=?", userid).Find(relations).Error
+	err = db.Table("relations").Where("to_user_id=?", userid).Find(&relations).Error
 	return relations, err
 }
 
 func FindUserStar(c *gin.Context, userid int64) (relations []Relation, err error) {
 	db := mymysql.GetDB(c)
-	err = db.Table("relations").Where("user_id=?", userid).Find(relations).Error
+	err = db.Table("relations").Where("user_id=?", userid).Find(&relations).Error
 	return relations, err
 }
 

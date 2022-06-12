@@ -27,14 +27,16 @@ func DealRelationAction(c *gin.Context, relation *io.ParamRealation, claim *jwt.
 }
 func FindFollweList(c *gin.Context, r *io.UserInfoReq) (*io.RelationResponse, error) {
 	var relations []models.Relation
-	relations, err := models.FindUserStar(c, r.UserID)
+	var err error
+	relations, err = models.FindUserStar(c, r.UserID)
 	ret := new(io.RelationResponse)
 	if err != nil {
 		return ret, err
 	}
 	ret.Response.StatusCode = common.CodeSuccess
 	ret.Response.StatusMsg = "success"
-	ret.UserList = make([]io.User, len(relations))
+	ret.UserList = make([]io.User, 0)
+
 	//找到关注列表信息，所以应该是ToUserInfo
 	myclas, err := jwt.ParseToken(r.Token)
 	if err != nil {
@@ -60,7 +62,7 @@ func FindFollwerList(c *gin.Context, r *io.UserInfoReq) (*io.RelationResponse, e
 	}
 	ret.Response.StatusCode = common.CodeSuccess
 	ret.Response.StatusMsg = "success"
-	ret.UserList = make([]io.User, len(relations))
+	ret.UserList = make([]io.User, 0)
 	//找到我的粉丝 所以应该是UserID
 	myclas, err := jwt.ParseToken(r.Token)
 	if err != nil {
