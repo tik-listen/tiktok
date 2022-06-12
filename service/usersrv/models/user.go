@@ -61,7 +61,7 @@ func Login(username string, password string) (int64, error) {
 func FindOneUser(ctx context.Context, user *tiktokdb.User) (*tiktokdb.User, error) {
 
 	userInfo, err := tiktokdb.GetOneUser(ctx, user)
-	if err == nil {
+	if err != nil {
 		return nil, err
 	}
 

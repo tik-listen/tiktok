@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	"tiktok/base/mymysql"
 )
 
@@ -13,7 +12,7 @@ const secret = "先暂时写死"
 // User 用户
 type User struct {
 	UserID   int64  `db:"user_id"`
-	Username string `db:"password"`
+	Username string `db:"username"`
 	Password string `db:"password"`
 }
 
@@ -57,7 +56,6 @@ func GetOneUser(ctx context.Context, user *User) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(result)
 	return result, nil
 }
 

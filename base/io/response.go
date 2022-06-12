@@ -72,11 +72,7 @@ func ResponseError(c *gin.Context, code common.ResCode) {
 // UserInfoResp 用户信息返回值
 type UserInfoResp struct {
 	Response
-	ID            int64  `json:"id"`
-	Name          string `json:"name"`
-	FollowCount   int64  `json:"follow_count"`
-	FollowerCount int64  `json:"follower_count"`
-	IsFollow      bool   `json:"is_follow"`
+	User
 }
 
 // ResponseSuccess4Login 登录成功
@@ -98,4 +94,12 @@ func RetResponse(c *gin.Context, resp *Response) {
 }
 func RetRelationResponse(c *gin.Context, resp *RelationResponse) {
 	c.JSON(http.StatusOK, resp)
+}
+
+type User struct {
+	FollowCount   int64  `json:"follow_count"`   // 关注总数
+	FollowerCount int64  `json:"follower_count"` // 粉丝总数
+	ID            int64  `json:"id"`             // 用户id
+	IsFollow      bool   `json:"is_follow"`      // true-已关注，false-未关注
+	Name          string `json:"name"`           // 用户名称
 }
