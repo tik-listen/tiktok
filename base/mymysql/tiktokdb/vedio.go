@@ -29,7 +29,7 @@ func InsertVideo(video Video, c *gin.Context) error {
 func CheckVideoExist(ctx *gin.Context, name string, userid int64) bool {
 	db := mymysql.GetDB(ctx)
 	var count int64
-	if result := db.Table("video").Where("user_id = ?", userid, "name = ?", name).Count(&count); result.Error != nil {
+	if result := db.Table("video").Where("user_id = ? and name = ?", userid, name).Count(&count); result.Error != nil {
 		return true
 	}
 	if count > 0 {

@@ -67,7 +67,7 @@ func registerRouter(r *gin.Engine) {
 		publish := apiRouter.Group("/publish").Use(middlewares.JWTAuthMiddleware())
 		{
 			// 发布操作
-			publish.POST("/action", controller.PublishActionHandler)
+			publish.POST("/action/", controller.PublishActionHandler)
 
 			// 查看发布记录操作
 			publish.GET("/list/", controller.PublishListHandler)

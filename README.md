@@ -20,12 +20,12 @@
   </a>
   <h3 align="center">抖音 from 字节后端青训营</h3>
   <p align="center">
-    基于云原生架构 ver 0.1
+    基于架构 ver 0.0.1
     <br />
     <a href="https://github.com/mrxuexi/tiktok"><strong>探索本项目的文档 »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/mrxuexi/tiktok">查看Demo</a>
+    <a href="https://xzi09smrpn.feishu.cn/docx/doxcnVfEWSyncDiFXVVze0Gx0Vg">查看Demo</a>
     ·
     <a href="https://github.com/mrxuexi/tiktok/issues">报告Bug</a>
     ·
@@ -52,23 +52,23 @@
 
 ### 上手指南
 
-请将所有链接中的“shaojintian/Best_README_template”改为“your_github_name/your_repository”
-
 
 
 ###### 开发前的配置要求
 
-1. Go 1.18 x.x.x
-2. Mysql 8
-2. 
+1. Go 1.18 
 
 ###### **安装步骤**
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo <p>
+2. go build <p>
+3. ./app config.yaml`s path
 
 ```sh
 git clone https://github.com/Mrxuexi/tiktok.git
+cd gateway
+go build -o xxxx main.go
+./xxxx config.yam
 ```
 
 ### 文件目录说明
@@ -78,24 +78,22 @@ eg:
 filetree
 ├─base（公共基础库，封装一些通用的逻辑）
 │  ├─logger（zap 日志）
+│  ├─common（一些公共响应码和错误的封装）
+│  ├─jwt（jwt操作的封装）
+│  ├─io（请求和响应的封装，未来将抽离）
 │  ├─middlewares（中间件）
 │  └─mykafka（封装 Kafka 操作）
 │  └─mymysql（封装 MySQL 公共 CRUD 操作）
 │  └─myredis（封装 Redis 公共操作）
 │  └─snowflake（分布式 id 生成器）
 ├─bff
-│  ├─accountbff（账号相关 BFF）
-│  ├─vediobff（视频相关 BFF）
-├─conf（viper 配置 yaml 模板文件）
+│  ├─accountbff（账号相关 BFF，预计 v0.0.3）
+│  ├─vediobff（视频相关 BFF，预计 v0.0.3）
 ├─deploy（部署）
 ├─design（设计文档）
-├─gateway（API 网关）
-│  ├─common
-│  ├─controller
-│  ├─io（请求和响应封装）
-│  ├─routers（路由）
+├─gateway（API 网关,v0.0.1 的项目入口）
 ├─images 
-├─service（服务）
+├─service（各个服务，v0.0.1 的 logic 层实现在此处）
 │  ├─commentsrv
 │  ├─favoritesrv
 │  ├─publishsrv
