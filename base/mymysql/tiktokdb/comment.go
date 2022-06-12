@@ -1,9 +1,21 @@
 package tiktokdb
 
-// Comment 评论
+import (
+	"github.com/gin-gonic/gin"
+	"tiktok/base/mymysql"
+	"time"
+)
+
 type Comment struct {
-	Id         int64  `json:"id,omitempty"`
-	User       User   `json:"user"`
-	Content    string `json:"content,omitempty"`
-	CreateDate string `json:"create_date,omitempty"`
+	CommentID  int64     `db:"comment_id"`
+	VideoID    int64     `db:"video_id"`
+	UserID     int64     `db:"user_id"`
+	Content    string    `db:"content"`
+	CreateTime time.Time `db:"create_time"`
+}
+
+func InsertOneComment(c *gin.Context, comment *Comment) (err error) {
+	db := mymysql.GetDB(c)
+	db.Table("comments").Create(comment)
+	return
 }
