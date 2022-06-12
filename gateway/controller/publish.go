@@ -1,62 +1,72 @@
 package controller
 
-//
-//import (
-//	"fmt"
-//	"github.com/gin-gonic/gin"
-//	"net/http"
-//	"path/filepath"
-//	"tiktok/base/io"
-//	"tiktok/base/mymysql/tiktokdb"
-//)
-//
-//type VideoListResponse struct {
-//	io.Response
-//	VideoList []tiktokdb.Video `json:"video_list"`
-//}
-//
-//// Publish check token then save upload file to public directory
-//func Publish(c *gin.Context) {
-//	token := c.PostForm("token")
-//
-//	if _, exist := usersLoginInfo[token]; !exist {
-//		c.JSON(http.StatusOK, io.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
-//		return
-//	}
-//
-//	data, err := c.FormFile("data")
-//	if err != nil {
-//		c.JSON(http.StatusOK, io.Response{
-//			StatusCode: 1,
-//			StatusMsg:  err.Error(),
-//		})
-//		return
-//	}
-//
-//	filename := filepath.Base(data.Filename)
-//	user := usersLoginInfo[token]
-//	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
-//	saveFile := filepath.Join("./public/", finalName)
-//	if err := c.SaveUploadedFile(data, saveFile); err != nil {
-//		c.JSON(http.StatusOK, io.Response{
-//			StatusCode: 1,
-//			StatusMsg:  err.Error(),
-//		})
-//		return
-//	}
-//
-//	c.JSON(http.StatusOK, io.Response{
-//		StatusCode: 0,
-//		StatusMsg:  finalName + " uploaded successfully",
-//	})
-//}
-//
-//// PublishList all users have same publish video list
-//func PublishList(c *gin.Context) {
-//	c.JSON(http.StatusOK, VideoListResponse{
-//		Response: io.Response{
-//			StatusCode: 0,
-//		},
-//		VideoList: DemoVideos,
-//	})
-//}
+import (
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+	"path/filepath"
+	"strconv"
+	"tiktok/base/common"
+	"tiktok/base/io"
+	"tiktok/base/jwt"
+	"tiktok/base/mymysql/tiktokdb"
+	"tiktok/base/snowflake"
+	"tiktok/service/publishsrv"
+)
+
+func PublishActionHandler(c *gin.Context) {
+	//解析token
+	token := c.PostForm("token")
+	MyClaims, err := jwt.ParseToken(token)
+	if err != nil {
+		zap.L().Error("token is invalid", zap.Error(err))
+		io.ResponseError(c, common.CodeTokenCreateErr)
+		return
+	}
+	//拿到文件流
+	data, err := c.FormFile("data")
+	if err != nil {
+		zap.L().Error("video fail", zap.Error(err))
+		io.ResponseError(c, common.CodeVideoErr)
+		return
+	}
+	name := data.Filename
+	videoId := snowflake.GenID()
+	//更新缓存和数据库
+	err = publishsrv.SaveVideoIm(name, MyClaims.UserID, videoId, c)
+	if err != nil {
+		zap.L().Error("sql err", zap.Error(err))
+		io.ResponseError(c, common.CodeVideoImFail)
+		return
+	}
+	//写入文件
+	saveFile := filepath.Join("./videosrv/", strconv.FormatInt(videoId, 10))
+	if err := c.SaveUploadedFile(data, saveFile); err != nil {
+		zap.L().Error("video fail", zap.Error(err))
+		io.ResponseError(c, common.CodeSaveFileErr)
+		return
+	}
+	io.ResponseSuccessVideoAction(c)
+}
+func PublishListHandler(c *gin.Context) {
+	token := c.PostForm("token")
+	_, err := jwt.ParseToken(token)
+	if err != nil {
+		zap.L().Error("token is invalid", zap.Error(err))
+		io.ResponseError(c, common.CodeTokenCreateErr)
+		return
+	}
+	userId := c.PostForm("id")
+	id, err := strconv.ParseInt(userId, 10, 64)
+	if err != nil {
+		zap.L().Error("get id err", zap.Error(err))
+		io.ResponseError(c, common.CodeInvalidParam)
+		return
+	}
+	videoList, err := tiktokdb.GetVideoListWithId(c, id)
+	if err != nil {
+		zap.L().Error("sql err", zap.Error(err))
+		io.ResponseError(c, common.CodeVideoImFail)
+		return
+	}
+	io.ResponseSuccessPublishList(c, videoList)
+}

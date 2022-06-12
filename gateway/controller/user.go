@@ -9,6 +9,7 @@ import (
 	"tiktok/base/io"
 	"tiktok/base/jwt"
 	"tiktok/service/usersrv/logic"
+
 )
 
 // RegisterHandler 处理注册请求的函数
@@ -75,6 +76,7 @@ func LoginHandler(c *gin.Context) {
 		io.ResponseError(c, common.CodeInvalidLoginInfo)
 		return
 	}
+
 	c.Set("userId", userId)
 	// 3. 返回成功响应
 	io.ResponseSuccess4Login(c, token)

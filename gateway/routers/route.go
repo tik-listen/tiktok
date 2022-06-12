@@ -58,7 +58,7 @@ func registerRouter(r *gin.Engine) {
 		apiRouter.POST("/user/login/", controller.LoginHandler)
 
 		// 视频流接口 with 鉴权
-		apiRouter.GET("/feed/").Use(middlewares.JWTAuthMiddleware())
+		apiRouter.GET("/feed/", controller.FeedHandler)
 
 		// 获取用户信息接口
 		apiRouter.GET("/user/", controller.UserInfo).Use(middlewares.JWTAuthMiddleware())
@@ -67,10 +67,10 @@ func registerRouter(r *gin.Engine) {
 		publish := apiRouter.Group("/publish").Use(middlewares.JWTAuthMiddleware())
 		{
 			// 发布操作
-			publish.POST("/action")
+			publish.POST("/action", controller.PublishActionHandler)
 
 			// 查看发布记录操作
-			publish.GET("/list/")
+			publish.GET("/list/", controller.PublishListHandler)
 
 		}
 

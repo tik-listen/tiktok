@@ -49,6 +49,14 @@ type ParamRealation struct {
 	Token      string `form:"token" binding:"required"`
 	ToUserID   int64  `form:"to_user_id" binding:"required"`
 	ActionType int32  `form:"action_type" binding:"required"`
+	Username string `form:"username" binding:"required,min=4,max=32"`
+	Password string `form:"password" binding:"required,min=6,max=32"`
+}
+
+// FeedRequest 请求视频流
+type FeedRequest struct {
+	LastTime int64  `json:"last_time"`
+	Token    string `json:"token"`
 }
 
 // getCurrentUserID: Get the user id, who in login state
