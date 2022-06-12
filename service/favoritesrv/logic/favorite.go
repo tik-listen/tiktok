@@ -2,13 +2,14 @@ package logic
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
 	"strconv"
 	"tiktok/base/common"
 	"tiktok/base/io"
 	"tiktok/base/jwt"
 	"tiktok/base/mymysql/tiktokdb"
 	"tiktok/service/favoritesrv/models"
+
+	"github.com/gin-gonic/gin"
 )
 
 //点赞和取消赞操作 注册业务操作
@@ -45,6 +46,7 @@ func GetFavoriteList(ctx *gin.Context, p *io.UserInfoReq) (*io.FavoriteListResp,
 	ret := new(io.FavoriteListResp)
 	ret.StatusCode = common.CodeSuccess
 	ret.StatusMsg = common.CodeSuccess.Msg()
+	ret.VideoList = make([]io.VideoRes, 0, len(favoites))
 	for _, favoite := range favoites {
 		temp, _ := tiktokdb.GetVideoListWithVideoId(ctx, favoite.VideoID)
 		res := io.VideoRes{}
