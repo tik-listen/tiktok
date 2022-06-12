@@ -21,7 +21,6 @@ var id int64
 func CommentHandler(c *gin.Context, p *io.ParamComment, data *io.CommentActionResponse) (err error) {
 	// 构造评论返回值实例
 	// 从参数token获取用户id,通过id获取用户信息
-	data = new(io.CommentActionResponse)
 	claim, err := jwt.ParseToken(p.Token)
 	if err != nil {
 		io.ResponseError(c, common.CodeNeedLogin)

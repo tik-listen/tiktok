@@ -68,7 +68,6 @@ func CommentHandler(c *gin.Context) {
 	data := new(io.CommentActionResponse)
 	err := logic.CommentHandler(c, p, data)
 
-	// TODO:返回响应
 	if err != nil {
 		zap.L().Error("logic.CommentHandler failed", zap.Error(err))
 		io.ResponseError(c, common.CodeServerBusy)
