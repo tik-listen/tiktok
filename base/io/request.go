@@ -46,9 +46,8 @@ type ParamComment struct {
 }
 
 type ParamRealation struct {
-	Token      string `form:"token" binding:"required"`
-	ToUserID   int64  `form:"to_user_id" binding:"required"`
-	ActionType int32  `form:"action_type" binding:"required"`
+	Token      string        `form:"token" binding:"required"`
+	ToUserID   int64         `form:"to_user_id" binding:"required"`
 	ActionType common.Action `form:"action_type" binding:"required"`
 }
 

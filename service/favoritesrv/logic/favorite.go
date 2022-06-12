@@ -2,16 +2,19 @@ package logic
 
 import (
 	"context"
+	"github.com/gin-gonic/gin"
+	"strconv"
 	"tiktok/base/common"
 	"tiktok/base/io"
 	"tiktok/base/jwt"
+	"tiktok/base/mymysql/tiktokdb"
 	"tiktok/service/favoritesrv/models"
 )
 
 //点赞和取消赞操作 注册业务操作
 func DealLikeAction(ctx context.Context, p *io.LikeActionReq) (*io.Response, error) {
-	jwt, _ := jwt.ParseToken(p.Token)
-	userID := jwt.UserID
+	jwt1, _ := jwt.ParseToken(p.Token)
+	userID := jwt1.UserID
 	favorite := models.Favorite{UserID: userID, VideoID: p.VideoID}
 	exites := models.IsFavorite(ctx, favorite)
 	//点赞并且不存在
@@ -34,7 +37,7 @@ func DealLikeAction(ctx context.Context, p *io.LikeActionReq) (*io.Response, err
 	}
 }
 
-func GetFavoriteList(ctx context.Context, p *io.UserInfoReq) (*io.FavoriteListResp, error) {
+func GetFavoriteList(ctx *gin.Context, p *io.UserInfoReq) (*io.FavoriteListResp, error) {
 	favoites, err := models.FindFavoriteByUserID(ctx, p.UserID)
 	if err != nil {
 		return &io.FavoriteListResp{}, err
@@ -43,8 +46,16 @@ func GetFavoriteList(ctx context.Context, p *io.UserInfoReq) (*io.FavoriteListRe
 	ret.StatusCode = common.CodeSuccess
 	ret.StatusMsg = common.CodeSuccess.Msg()
 	for _, favoite := range favoites {
-		temp, _ := models.GetVideoWithVideoId(ctx, favoite.VideoID)
-		ret.VideoList = append(ret.VideoList, temp)
+		temp, _ := tiktokdb.GetVideoListWithVideoId(ctx, favoite.VideoID)
+		res := io.VideoRes{}
+		res.Id = temp.VideoId
+		res.User, _ = tiktokdb.GetOneUserWithId(ctx, temp.UserId)
+		res.PlayUrl = "http://82.157.141.199/" + strconv.FormatInt(temp.VideoId, 10) + ".mp4"
+		res.FavoriteCount = temp.FavoriteCount
+		res.CommentCount = temp.CommentCount
+		res.IsFavorite = temp.IsFavorite
+		res.Name = temp.Name
+		ret.VideoList = append(ret.VideoList, res)
 	}
 	return ret, nil
 }

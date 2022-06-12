@@ -43,7 +43,6 @@ func FeedHandler(c *gin.Context) {
 		io.ResponseSuccessVideoList(c, res)
 		return
 	} else {
-		now := c.Query("last_time")
 		if token != "" {
 			_, err := jwt.ParseToken(token)
 			if err != nil {
@@ -54,7 +53,7 @@ func FeedHandler(c *gin.Context) {
 			//添加个性推荐的参数并返回
 			//io.ResponseSuccessVideoList(c,个性化推荐列表)
 		}
-		t, _ := time.ParseInLocation("2006-01-02 15:04:05", now, time.Local)
+		t, _ := time.ParseInLocation("2006-01-02 15:04:05", lastTime, time.Local)
 		data, err := tiktokdb.GetVideoListWithTime(c, t)
 		if err != nil {
 			io.ResponseError(c, common.CodeGetVideoListErr)
