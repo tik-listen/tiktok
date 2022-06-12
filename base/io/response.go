@@ -93,11 +93,12 @@ func ResponseSuccessVideoAction(c *gin.Context) {
 
 // ResponseSuccessVideoList 获取时间排序的视频列表成功
 func ResponseSuccessVideoList(c *gin.Context, videoList []tiktokdb.Video) {
-	var res []VideoRes
-	for i := 0; i < 10; i++ {
-		res[i].Id = videoList[i].Id
+	n := len(videoList)
+	var res = make([]VideoRes, n)
+	for i := 0; i < n; i++ {
+		res[i].Id = videoList[i].VideoId
 		res[i].User, _ = tiktokdb.GetOneUserWithId(c, videoList[i].UserId)
-		res[i].PlayUrl = "http://82.157.141.199/" + strconv.FormatInt(videoList[i].Id, 10) + ".mp4"
+		res[i].PlayUrl = "http://82.157.141.199/" + strconv.FormatInt(videoList[i].VideoId, 10) + ".mp4"
 		res[i].FavoriteCount = videoList[i].FavoriteCount
 		res[i].CommentCount = videoList[i].FavoriteCount
 		res[i].IsFavorite = videoList[i].IsFavorite

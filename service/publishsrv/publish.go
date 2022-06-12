@@ -14,13 +14,13 @@ func SaveVideoIm(name string, userId int64, videoId int64, c *gin.Context) error
 		return errors.New("video has exist")
 	}
 	video := tiktokdb.Video{
-		Id:            videoId,
+		VideoId:       videoId,
 		UserId:        userId,
 		CoverUrl:      "",
 		FavoriteCount: 0,
 		CommentCount:  0,
 		IsFavorite:    false,
-		Date:          time.Now(),
+		Date:          time.Now().Unix(),
 		Name:          name,
 	}
 	err := tiktokdb.InsertVideo(video, c)

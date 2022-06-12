@@ -9,14 +9,14 @@ import (
 
 // Video vedio 在redis的格式 video+时间（到秒）的Set存储视频id
 type Video struct {
-	Id            int64     `json:"id,omitempty" db:"video_id"`
-	UserId        int64     `json:"author" db:"user_id"`
-	CoverUrl      string    `json:"cover_url" db:"cover_url"`
-	FavoriteCount int64     `json:"favorite_count" db:"favorite_count"`
-	CommentCount  int64     `json:"comment_count" db:"comment_count"`
-	IsFavorite    bool      `json:"is_favorite" db:"is_favorite"`
-	Date          time.Time `json:"date" db:"date"`
-	Name          string    `json:"name" db:"name"`
+	VideoId       int64  `json:"id" db:"video_id"`
+	UserId        int64  `json:"author" db:"user_id"`
+	CoverUrl      string `json:"cover_url" db:"cover_url"`
+	FavoriteCount int64  `json:"favorite_count" db:"favorite_count"`
+	CommentCount  int64  `json:"comment_count" db:"comment_count"`
+	IsFavorite    bool   `json:"is_favorite" db:"is_favorite"`
+	Date          int64  `json:"date" db:"date"`
+	Name          string `json:"name" db:"name"`
 }
 
 // InsertVideo 插入video结构体
@@ -43,8 +43,8 @@ func CheckVideoExist(ctx *gin.Context, name string, userid int64) bool {
 func GetVideoListWithTime(c *gin.Context, now time.Time) ([]Video, error) {
 	db := mymysql.GetDB(c)
 	var res []Video
-	err := db.Table("video").Where("data < ", now).Limit(10).Find(&res)
-	if err != nil {
+	err := db.Table("video").Where("date < ?", now.Unix()).Limit(10).Find(&res)
+	if err.Error != nil {
 		return nil, errors.New("MySQL ERR")
 	}
 	return res, nil

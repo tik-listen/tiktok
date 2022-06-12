@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"tiktok/base/common"
 	"tiktok/base/io"
 	"tiktok/base/jwt"
 	"tiktok/base/mymysql/tiktokdb"
@@ -14,9 +13,9 @@ import (
 func RegisterHandler(ctx context.Context, p *io.ParamRegister) (*tiktokdb.User, error) {
 
 	// 1.判断用户存不存在
-	if err := models.CheckUserExist(ctx, p.Username); err != nil {
+	/*if err := models.CheckUserExist(ctx, p.Username); err != nil {
 		return nil, common.ErrorUserExist
-	}
+	}*/
 
 	// 2.生成 user_id
 	userID := snowflake.GenID()
