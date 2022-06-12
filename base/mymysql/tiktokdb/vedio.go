@@ -60,3 +60,14 @@ func GetVideoListWithId(c *gin.Context, id int64) ([]Video, error) {
 	}
 	return res, nil
 }
+
+// GetVideoListWithVideoId  根据视频id获取信息
+func GetVideoListWithVideoId(c *gin.Context, id int64) (Video, error) {
+	db := mymysql.GetDB(c)
+	var res Video
+	err := db.Table("video").Where("video_id = ?", id).Find(&res)
+	if err.Error != nil {
+		return Video{}, errors.New("MySQL ERR")
+	}
+	return res, nil
+}
