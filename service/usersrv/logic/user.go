@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"tiktok/base/common"
 	"tiktok/base/io"
@@ -75,9 +76,9 @@ func Login(p *io.ParamLogin) (userId int64, token string, err error) {
 //}
 
 // GetUserInfo 查询用户信息
-func GetUserInfo(ctx *gin.Context, p *io.UserInfoReq, claim *jwt.MyClaims) (resp *io.UserInfoResp, err error) {
+func GetUserInfo(ctx *gin.Context, p *io.UserInfoReq, claim *jwt.MyClaims) (*io.UserInfoResp, error) {
 
-	resp = new(io.UserInfoResp)
+	resp := new(io.UserInfoResp)
 	userInfo := &tiktokdb.User{
 		UserID: p.UserID,
 	}
@@ -87,8 +88,11 @@ func GetUserInfo(ctx *gin.Context, p *io.UserInfoReq, claim *jwt.MyClaims) (resp
 	if err != nil {
 		return nil, err
 	}
+
 	resp.Name = user.Username
 
+	fmt.Println(user)
+	fmt.Println(resp)
 	// 获取用户的粉丝数
 	fansCount, err := models.CountUserFans(ctx, p.UserID)
 	if err != nil {
@@ -108,5 +112,5 @@ func GetUserInfo(ctx *gin.Context, p *io.UserInfoReq, claim *jwt.MyClaims) (resp
 	if err != nil {
 		return nil, err
 	}
-	return
+	return resp, nil
 }
