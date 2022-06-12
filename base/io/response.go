@@ -28,8 +28,9 @@ type CommentListResponse struct {
 	CommentList []tiktokdb.Comment `json:"comment_list,omitempty"`
 }
 
+// CommentActionResponse 评论返回值
 type CommentActionResponse struct {
-	Response
+	UserInfoReq
 	Comment tiktokdb.Comment `json:"comment,omitempty"`
 }
 
@@ -63,6 +64,7 @@ func ResponseError(c *gin.Context, code common.ResCode) {
 	})
 }
 
+// UserInfoResp 用户信息返回值
 type UserInfoResp struct {
 	Response
 	ID            int64  `json:"id"`

@@ -91,24 +91,19 @@ func UserInfo(c *gin.Context) {
 		io.ResponseError(c, common.CodeInvalidParam)
 		return
 	}
-	// 2. 服务调用
-	// 目前是直接调用模块的 logic 功能
-	//resp, err := logic.GetUserInfo(c, p)
-	//if err != nil {
-	//	io.ResponseError(c, common.CodeInvalidLoginInfo)
-	//	return
-	//}
+	// 登录校验
 	claim, err := jwt.ParseToken(p.Token)
 	if err != nil {
 		io.ResponseError(c, common.CodeNeedLogin)
 		return
 	}
-	resp := new(io.UserInfoResp)
-	resp.ID = claim.UserID
-	resp.FollowerCount = 10
-	resp.FollowCount = 10
-	resp.Name = claim.Username
-	resp.IsFollow = false
+	//2. 服务调用
+	//目前是直接调用模块的 logic 功能
+	resp, err := logic.GetUserInfo(c, p, claim)
+	if err != nil {
+		io.ResponseError(c, common.CodeInvalidLoginInfo)
+		return
+	}
 
 	// 3. 返回成功响应
 	io.ResponseSuccessUserInfo(c, resp)

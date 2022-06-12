@@ -1,6 +1,15 @@
 package controller
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
+	"go.uber.org/zap"
+	"net/http"
+	"tiktok/base/common"
+	"tiktok/base/io"
+	"tiktok/service/commentsrv/logic"
+)
 
 // import (
 // 	"github.com/gin-gonic/gin"
@@ -39,6 +48,28 @@ import "github.com/gin-gonic/gin"
 // 	})
 // }
 
+// CommentHandler 新增评论
 func CommentHandler(c *gin.Context) {
-
+	// 获取参数
+	p := new(io.ParamComment)
+	if err := c.ShouldBindWith(p, binding.Form); err != nil {
+		// 请求参数有误，直接返回响应
+		zap.L().Error("comment with invalid param", zap.Error(err))
+		// 判断err是不是validator.ValidationErrors 类型
+		errors := err.(validator.ValidationErrors)
+		if errors != nil {
+			// 返回参数错误响应
+			io.ResponseError(c, common.CodeInvalidParam)
+			return
+		}
+		return
+	}
+	// 逻辑处理
+	data, err := logic.CommentHandler(c, p)
+	// TODO:返回响应
+	if err != nil {
+		zap.L().Error("logic.CommentHandler failed", zap.Error(err))
+		return
+	}
+	c.JSON(http.StatusOK, &data)
 }

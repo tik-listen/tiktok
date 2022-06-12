@@ -72,3 +72,15 @@ func Login(p *io.ParamLogin) (userId int64, token string, err error) {
 //	resp.IsFollow = false
 //	return resp, nil
 //}
+
+// GetUserInfo TODO:未实现,在上面
+func GetUserInfo(ctx context.Context, p *io.UserInfoReq, claim *jwt.MyClaims) (resp *io.UserInfoResp, err error) {
+
+	resp = new(io.UserInfoResp)
+	resp.ID = claim.UserID
+	resp.FollowerCount = 10
+	resp.FollowCount = 10
+	resp.Name = claim.Username
+	resp.IsFollow = false
+	return
+}

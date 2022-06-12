@@ -1,6 +1,6 @@
 package tiktokdb
 
-// comment
+// Comment 评论
 type Comment struct {
 	Id         int64  `json:"id,omitempty"`
 	User       User   `json:"user"`
