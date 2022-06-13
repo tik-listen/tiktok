@@ -16,7 +16,7 @@
 
 <p align="center">
   <a href="https://github.com/mrxuexi/tiktok/">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="blob/main/images/logo.png/logo.png" alt="Logo" width="80" height="80">
   </a>
   <h3 align="center">抖音 from 字节后端青训营</h3>
   <p align="center">
