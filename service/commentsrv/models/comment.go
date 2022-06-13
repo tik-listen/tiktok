@@ -12,7 +12,9 @@ func InsertComment(c *gin.Context, comment *tiktokdb.Comment) error {
 func DeleteComment(c *gin.Context, cid int64) error {
 	return tiktokdb.DeleteOneComment(c, cid)
 }
-
+func GetUIDbyCID(c *gin.Context, cid int64) (uid int64, err error) {
+	return tiktokdb.GetUIDbyCID(c, cid)
+}
 func CheckCommentExist(c *gin.Context, cid int64) (flag bool, err error) {
 	return tiktokdb.CheckCommentExist(c, cid)
 }

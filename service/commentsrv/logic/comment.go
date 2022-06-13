@@ -57,7 +57,7 @@ func AddComment(c *gin.Context, p *io.ParamComment, data *io.CommentActionRespon
 	// 生成评论id
 	commentID := snowflake.GenID()
 	// 构造实例对象
-	t := time.Now()
+	t := time.Now().Unix()
 	comment := &tiktokdb.Comment{
 		CommentID:  commentID,
 		VideoID:    p.VideoId,
@@ -67,7 +67,7 @@ func AddComment(c *gin.Context, p *io.ParamComment, data *io.CommentActionRespon
 	}
 	data.Comment.Id = commentID
 	data.Comment.Content = p.CommentText
-	data.Comment.CreateDate = t.Format("01-02")
+	data.Comment.CreateDate = Unix2MonthAndDay(t)
 	// 保存到数据库
 	return models.InsertComment(c, comment)
 }
@@ -75,7 +75,7 @@ func AddComment(c *gin.Context, p *io.ParamComment, data *io.CommentActionRespon
 // DelComment 删除评论
 func DelComment(c *gin.Context, cid int64) (err error) {
 	// 判断是否存在
-	// 1.判断用户存不存在
+	// 1.判断评论存不存在，如果存在，拿到用户id
 	flag, err := models.CheckCommentExist(c, cid)
 	if err != nil {
 		return common.ErrorMysqlDbErr
@@ -85,7 +85,12 @@ func DelComment(c *gin.Context, cid int64) (err error) {
 	}
 
 	// 判断cid是否等于用户id
-	if cid != id {
+	//println("debug=====\n", comment.UserID, id)
+	uid, err := models.GetUIDbyCID(c, cid)
+	if err != nil {
+		return common.ErrorMysqlDbErr
+	}
+	if uid != id {
 		return common.ErrorCommentNotEquUser
 	}
 	return models.DeleteComment(c, cid)
@@ -109,7 +114,7 @@ func GetCommentList(c *gin.Context, p *io.ParmaCommentList) (list *io.CommentLis
 		tempComment := new(io.Comment)
 		tempComment.Id = comment.CommentID
 		tempComment.Content = comment.Content
-		tempComment.CreateDate = comment.CreateTime.Format("01-02")
+		tempComment.CreateDate = Unix2MonthAndDay(comment.CreateTime)
 
 		userInfoRep := new(io.UserInfoReq)
 		userInfoRep.UserID = comment.UserID
@@ -122,4 +127,9 @@ func GetCommentList(c *gin.Context, p *io.ParmaCommentList) (list *io.CommentLis
 		list.CommentList = append(list.CommentList, *tempComment)
 	}
 	return
+}
+func Unix2MonthAndDay(t int64) string {
+	timeStr := time.Unix(t, 0)
+	tm2 := timeStr.Format("01-02")
+	return tm2
 }

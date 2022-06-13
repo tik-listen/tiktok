@@ -3,15 +3,14 @@ package tiktokdb
 import (
 	"github.com/gin-gonic/gin"
 	"tiktok/base/mymysql"
-	"time"
 )
 
 type Comment struct {
-	CommentID  int64     `db:"comment_id"`
-	VideoID    int64     `db:"video_id"`
-	UserID     int64     `db:"user_id"`
-	Content    string    `db:"content"`
-	CreateTime time.Time `db:"create_time"`
+	CommentID  int64  `db:"comment_id"`
+	VideoID    int64  `db:"video_id"`
+	UserID     int64  `db:"user_id"`
+	CreateTime int64  `db:"create_time"`
+	Content    string `db:"content"`
 }
 
 func InsertOneComment(c *gin.Context, comment *Comment) (err error) {
@@ -25,8 +24,9 @@ func DeleteOneComment(c *gin.Context, cid int64) (err error) {
 	db.Delete(&Comment{}, cid)
 	return
 }
+
+// CheckCommentExist 根据cid判断评论是否存在
 func CheckCommentExist(c *gin.Context, cid int64) (flag bool, err error) {
-	// 获取数据库连接
 	db := mymysql.GetDB(c)
 
 	var count int64
@@ -36,8 +36,16 @@ func CheckCommentExist(c *gin.Context, cid int64) (flag bool, err error) {
 	if count > 0 {
 		return true, nil
 	}
-
 	return false, nil
+}
+
+// GetUIDbyCID 通过cid查询uid
+func GetUIDbyCID(c *gin.Context, cid int64) (uid int64, err error) {
+	db := mymysql.GetDB(c)
+	var comment Comment
+	err = db.Table("comments").Where("comment_id = ?", cid).Find(&comment).Error
+	uid = comment.UserID
+	return
 }
 func FindCommentList(c *gin.Context, vid int64) (clist []Comment, err error) {
 	db := mymysql.GetDB(c)
