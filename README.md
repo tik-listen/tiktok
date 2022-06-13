@@ -16,7 +16,7 @@
 
 <p align="center">
   <a href="https://github.com/mrxuexi/tiktok/">
-    <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a2931789a5fe4bfb9c1dfa8775c9e970~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp?" alt="Logo" width="400" height="400">
+    <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a2931789a5fe4bfb9c1dfa8775c9e970~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp?" alt="Logo" width="200" height="200">
   </a>
   <h3 align="center">抖音 from 字节后端青训营</h3>
   <p align="center">
