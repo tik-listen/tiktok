@@ -30,6 +30,10 @@ func CommentHandler(c *gin.Context, p *io.ParamComment, data *io.CommentActionRe
 	userInfoRep := new(io.UserInfoReq)
 	userInfoRep.UserID = id
 	userResp, err := logic.GetUserInfo(c, userInfoRep, claim)
+	if err != nil {
+		zap.L().Error("logic.GetUserInfo(c, userInfoRep, claim) failed", zap.Error(err))
+		return
+	}
 	data.Comment.User = *userResp
 	// 判断是删除评论还是添加评论
 	if p.ActionType == addComment {
@@ -48,11 +52,12 @@ func CommentHandler(c *gin.Context, p *io.ParamComment, data *io.CommentActionRe
 	return
 }
 
+// AddComment 添加评论
 func AddComment(c *gin.Context, p *io.ParamComment, data *io.CommentActionResponse) (err error) {
 	// 生成评论id
 	commentID := snowflake.GenID()
 	// 构造实例对象
-	t := time.Now()
+	t := time.Now().Unix()
 	comment := &tiktokdb.Comment{
 		CommentID:  commentID,
 		VideoID:    p.VideoId,
@@ -62,14 +67,15 @@ func AddComment(c *gin.Context, p *io.ParamComment, data *io.CommentActionRespon
 	}
 	data.Comment.Id = commentID
 	data.Comment.Content = p.CommentText
-	data.Comment.CreateDate = t.Format("01-02")
+	data.Comment.CreateDate = Unix2MonthAndDay(t)
 	// 保存到数据库
 	return models.InsertComment(c, comment)
 }
 
+// DelComment 删除评论
 func DelComment(c *gin.Context, cid int64) (err error) {
 	// 判断是否存在
-	// 1.判断用户存不存在
+	// 1.判断评论存不存在，如果存在，拿到用户id
 	flag, err := models.CheckCommentExist(c, cid)
 	if err != nil {
 		return common.ErrorMysqlDbErr
@@ -79,8 +85,51 @@ func DelComment(c *gin.Context, cid int64) (err error) {
 	}
 
 	// 判断cid是否等于用户id
-	if cid != id {
+	//println("debug=====\n", comment.UserID, id)
+	uid, err := models.GetUIDbyCID(c, cid)
+	if err != nil {
+		return common.ErrorMysqlDbErr
+	}
+	if uid != id {
 		return common.ErrorCommentNotEquUser
 	}
 	return models.DeleteComment(c, cid)
+}
+
+func GetCommentList(c *gin.Context, p *io.ParmaCommentList) (list *io.CommentListResponse, err error) {
+	clist, err := models.FindCommentList(c, p.VideoId)
+	list = new(io.CommentListResponse)
+	if err != nil {
+		return list, err
+	}
+	claim, err := jwt.ParseToken(p.Token)
+	if err != nil {
+		io.ResponseError(c, common.CodeNeedLogin)
+		return
+	}
+	list.Response.StatusCode = common.CodeSuccess
+	list.Response.StatusMsg = "success"
+	list.CommentList = make([]io.Comment, 0)
+	for _, comment := range clist {
+		tempComment := new(io.Comment)
+		tempComment.Id = comment.CommentID
+		tempComment.Content = comment.Content
+		tempComment.CreateDate = Unix2MonthAndDay(comment.CreateTime)
+
+		userInfoRep := new(io.UserInfoReq)
+		userInfoRep.UserID = comment.UserID
+		userResp, err := logic.GetUserInfo(c, userInfoRep, claim)
+		if err != nil {
+			zap.L().Error("logic.GetUserInfo(c, userInfoRep, claim) failed", zap.Error(err))
+			return nil, err
+		}
+		tempComment.User = *userResp
+		list.CommentList = append(list.CommentList, *tempComment)
+	}
+	return
+}
+func Unix2MonthAndDay(t int64) string {
+	timeStr := time.Unix(t, 0)
+	tm2 := timeStr.Format("01-02")
+	return tm2
 }
