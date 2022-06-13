@@ -120,7 +120,8 @@ filetree
 
 ### 开发的架构 
 
-![tiktok 项目架构](design/tiktok 项目架构.png)
+![tiktok 项目架构](https://user-images.githubusercontent.com/56754549/173394272-6bef5aca-fd7d-41ca-ab49-1fb3efa7dd91.png)
+
 
 请阅读[ARCHITECTURE.md](https://github.com/mrxuexi/tiktok/) 查阅为该项目的架构。
 
