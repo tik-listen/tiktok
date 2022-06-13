@@ -67,7 +67,6 @@
 
 ###### 开发前的配置要求
 
-1. Go 1.18 
 
 ###### **安装步骤**
 
@@ -81,6 +80,8 @@ cd gateway
 go build -o xxxx main.go
 ./xxxx config.yam
 ```
+##### DB DESIGN
+![image](https://user-images.githubusercontent.com/56754549/173394004-3cd278a6-0b75-470e-8c81-2c1a1f07642f.png)
 
 ### 文件目录说明
 eg:
