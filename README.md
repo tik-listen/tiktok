@@ -15,7 +15,7 @@
 <br />
 
 <p align="center">
-  <a href="https://github.com/shaojintian/Best_README_template/">
+  <a href="https://github.com/mrxuexi/tiktok/">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
   <h3 align="center">抖音 from 字节后端青训营</h3>
@@ -32,8 +32,6 @@
     <a href="https://github.com/mrxuexi/tiktok/issues">提出新特性</a>
   </p>
 
-
-</p>
 
 ## 目录
 
@@ -123,6 +121,8 @@ filetree
 - [MySQL](https://www.mysql.com/)
 - [Kubernetes](https://kubernetes.io/)
 - [gRPC](https://grpc.io/)
+- [Nacos](https://nacos.io)
+- ......
 
 ### 贡献者
 
