@@ -45,6 +45,11 @@ type ParamComment struct {
 	CommentId   int64  `form:"comment_id"`
 }
 
+// ParmaCommentList 拉取评论列表
+type ParmaCommentList struct {
+	Token   string `form:"token" binding:"required"`
+	VideoId int64  `form:"video_id" binding:"required"`
+}
 type ParamRealation struct {
 	Token      string        `form:"token" binding:"required"`
 	ToUserID   int64         `form:"to_user_id" binding:"required"`

@@ -88,7 +88,7 @@ func registerRouter(r *gin.Engine) {
 		comment := apiRouter.Group("/comment").Use(middlewares.JWTAuthMiddleware())
 		{
 			comment.POST("/action/", controller.CommentHandler)
-			comment.GET("/list/")
+			comment.GET("/list/", controller.GetCommentList)
 		}
 
 		// 关系相关路由组 with 鉴权

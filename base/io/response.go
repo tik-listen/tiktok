@@ -45,7 +45,6 @@ type CommentListResponse struct {
 
 // CommentActionResponse 评论返回值
 type CommentActionResponse struct {
-	UserInfoReq
 	Response
 	Comment Comment `json:"comment,omitempty"`
 }
