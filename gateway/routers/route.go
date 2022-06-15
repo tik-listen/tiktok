@@ -1,14 +1,16 @@
 package routers
 
 import (
+	"github.com/gin-contrib/pprof"
+	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	gs "github.com/swaggo/gin-swagger"
+	"go.uber.org/zap"
 	"net/http"
 	"tiktok/base/logger"
 	"tiktok/base/middlewares"
+	_ "tiktok/docs"
 	"tiktok/gateway/controller"
-
-	"github.com/gin-contrib/pprof"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 func RunServer(mode string) {
@@ -51,6 +53,8 @@ func registerRouter(r *gin.Engine) {
 
 	apiRouter := r.Group("/douyin")
 	{
+		// swagger api接口文档路由
+		apiRouter.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 		// 注册接口
 		apiRouter.POST("/user/register/", controller.RegisterHandler)
 

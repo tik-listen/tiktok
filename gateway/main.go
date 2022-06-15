@@ -51,6 +51,19 @@ func initApp() error {
 	return nil
 }
 
+// @title tiktok抖音项目
+// @version 0.0.2
+// @description 仿抖音实现视频的浏览，评论，喜欢，发布等功能
+
+// @contact.name konyue,msa52412,Mrxuexi, 199094212
+// @contact.url https://github.com/Mrxuexi/tiktok
+// @contact.email
+
+// @license.name MIT
+// @license.url https://github.com/Mrxuexi/tiktok/blob/main/LICENSE.txt
+
+// @host 127.0.0.1:8080
+// @BasePath
 func main() {
 
 	// 检验参数是否有指定配置文件路径

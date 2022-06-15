@@ -52,6 +52,15 @@ const MsgSuccess = "操作成功"
 const MsgFailed = "操作失败"
 
 // CommentHandler 评论动作
+// @Summary 评论请求
+// @Description 返回操作是否成功
+// @Tags 评论
+// @Accept application/json
+// @Produce application/json
+// @Param object query io.ParamComment false "查询参数"
+// @Security ApiKeyAuth
+// @Success 200 {object} io.CommentActionResponse
+// @Router /douyin/comment/action [post]
 func CommentHandler(c *gin.Context) {
 	// 获取参数
 	p := new(io.ParamComment)
@@ -84,6 +93,16 @@ func CommentHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, &data)
 }
 
+// GetCommentList 获取评论列表
+// @Summary 获取评论列表
+// @Description 返回评论列表
+// @Tags 评论
+// @Accept application/json
+// @Produce application/json
+// @Param object query io.ParmaCommentList false "查询参数"
+// @Security ApiKeyAuth
+// @Success 200 {object} io.CommentListResponse
+// @Router /douyin/comment/list [get]
 func GetCommentList(c *gin.Context) {
 	// 获取参数
 	p := new(io.ParmaCommentList)
