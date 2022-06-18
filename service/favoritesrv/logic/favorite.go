@@ -7,6 +7,7 @@ import (
 	"tiktok/base/io"
 	"tiktok/base/jwt"
 	"tiktok/base/mymysql/tiktokdb"
+	"tiktok/base/snowflake"
 	"tiktok/service/favoritesrv/models"
 
 	"github.com/gin-gonic/gin"
@@ -20,12 +21,13 @@ func DealLikeAction(ctx context.Context, p *io.LikeActionReq) (*io.Response, err
 	exites := models.IsFavorite(ctx, favorite)
 	//点赞并且不存在
 	if p.ActionType == common.Add && !exites {
-
+		favoriteID := snowflake.GenID()
+		favorite.FavoriteID = favoriteID
 		err := models.InsertFavorite(ctx, favorite)
 		if err != nil {
-			return &io.Response{StatusCode: common.CodeSuccess, StatusMsg: "success"}, err
+			return &io.Response{StatusCode: common.CodeInvalidParam, StatusMsg: err.Error()}, nil
 		}
-		return &io.Response{StatusCode: common.CodeInvalidParam, StatusMsg: err.Error()}, nil
+		return &io.Response{StatusCode: common.CodeSuccess, StatusMsg: "success"}, err
 	} else if p.ActionType == common.Cancle && exites {
 		//取消点赞且存在
 		err := models.DeleteFavorite(ctx, favorite)
