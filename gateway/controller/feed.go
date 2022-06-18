@@ -35,7 +35,7 @@ func FeedHandler(c *gin.Context) {
 			io.ResponseSuccessVideoList(c, data)
 		}
 
-		var res []tiktokdb.Video
+		res := make([]tiktokdb.Video, 10)
 		for i := 0; i < 10; i++ {
 			b := []byte(data[i])
 			_ = json.Unmarshal(b, &res[i])
