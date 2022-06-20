@@ -76,7 +76,7 @@
 
 ```sh
 git clone https://github.com/Mrxuexi/tiktok.git
-cd gateway
+cd apigw
 go build -o xxxx main.go
 ./xxxx config.yam
 ```
@@ -102,16 +102,16 @@ filetree
 │  ├─accountbff（账号相关 BFF，预计 v0.0.3）
 │  ├─vediobff（视频相关 BFF，预计 v0.0.3）
 ├─deploy（部署）
-├─design（设计文档）
-├─gateway（API 网关,v0.0.1 的项目入口）
+├─docs（设计文档）
+├─apigw（API 网关,v0.0.1 的项目入口）
 ├─images 
-├─service（各个服务，v0.0.1 的 logic 层实现在此处）
+├─apps（各个服务，v0.0.1 的 logic 层实现在此处）
 │  ├─commentsrv
 │  ├─favoritesrv
 │  ├─publishsrv
 │  ├─relationsrv
 │  └─usersrv
-├─setting（viper 配置）
+├─configure（viper 配置）
 ```
 
 

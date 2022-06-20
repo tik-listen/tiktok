@@ -11,17 +11,17 @@ import (
 	"os"
 	"runtime/debug"
 	"strings"
-	"tiktok/setting"
+	"tiktok/source/configure"
 	"time"
 )
 
 var lg *zap.Logger
 
 // Init init the lg
-func Init(cfg *setting.LogConfig, mode string) (err error) {
+func Init(cfg *configure.LogConfig, mode string) (err error) {
 	// zap file path
 	writeSyncer := getLogWriter(cfg.Filename, cfg.MaxSize, cfg.MaxBackups, cfg.MaxAge)
-	
+
 	encoder := getEncoder()
 	var l = new(zapcore.Level)
 	err = l.UnmarshalText([]byte(cfg.Level))

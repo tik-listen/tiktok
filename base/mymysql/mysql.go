@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"go.uber.org/zap"
-	"tiktok/setting"
+	"tiktok/source/configure"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -17,7 +17,7 @@ var (
 	err            error
 )
 
-func InitMysql(cfg *setting.MySQLConfig) error {
+func InitMysql(cfg *configure.MySQLConfig) error {
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
 		cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DB,
