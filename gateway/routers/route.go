@@ -20,7 +20,7 @@ func RunServer(mode string) {
 	}
 
 	// 生成一个默认的路由引擎
-	r := gin.New()
+	r := gin.Default()
 
 	// TODO:r.Use(logger.GinLogger(), logger.GinRecovery(true), middlewares.RateLimitMiddleware(2*time.Second, 1))
 
@@ -92,11 +92,12 @@ func registerRouter(r *gin.Engine) {
 		}
 
 		// 关系相关路由组 with 鉴权
-		relation := apiRouter.Group("/relation")
+		relation := apiRouter.Group("/relation").Use(middlewares.JWTAuthMiddleware())
 		{
-			relation.POST("/action/", controller.RelationAction)
-			relation.GET("/follower/list/", controller.FollowerList)
-			relation.GET("/follow/list/", controller.FollowList)
+
+			relation.POST("/action/", controller.RelationAction)     // http://127.0.0.1:8080/douyin/relation/action/
+			relation.GET("/follower/list/", controller.FollowerList) //http://127.0.0.1:8080/douyin/relation/follower/list/
+			relation.GET("/follow/list/", controller.FollowList)     //http://127.0.0.1:8080/douyin/relation/follow/list/
 		}
 	}
 

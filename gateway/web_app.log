@@ -1147,3 +1147,5 @@
 {"level":"INFO","time":"2022-06-18T23:21:36.161+0800","caller":"mymysql/mysql.go:31","msg":"init MySQL success:"}
 {"level":"ERROR","time":"2022-06-18T23:21:40.086+0800","caller":"controller/favorite.go:32","msg":"DealLikeAction failed","error":"参数错误"}
 {"level":"INFO","time":"2022-06-18T23:21:40.086+0800","caller":"logger/logger.go:80","msg":"/douyin/favorite/action/","status":200,"method":"POST","path":"/douyin/favorite/action/","query":"token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMDI0NjI4NTU0NjIyOTc2MCwidXNlcm5hbWUiOiIxMjNAcXEuY29tIiwiZXhwIjoxNjg2NTY4MzE4LCJpc3MiOiJ0aWt0b2sifQ.to1CZU-k5Ysue7Z63VGB3pkZNoGaNxtQJeNDhijZAuM&video_id=1&action_type=1","ip":"192.168.49.66","user-agent":"okhttp/3.14.9","errors":"","cost":0.1781455}
+{"level":"INFO","time":"2022-06-25T22:22:22.597+0800","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2022-06-25T22:22:22.948+0800","caller":"mymysql/mysql.go:31","msg":"init MySQL success:"}

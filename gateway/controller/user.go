@@ -9,12 +9,10 @@ import (
 	"tiktok/base/io"
 	"tiktok/base/jwt"
 	"tiktok/service/usersrv/logic"
-
 )
 
 // RegisterHandler 处理注册请求的函数
 func RegisterHandler(c *gin.Context) {
-
 	// 1. 获取参数和参数校验
 	// 绑定 Query 参数
 	p := new(io.ParamRegister)

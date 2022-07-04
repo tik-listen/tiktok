@@ -12,13 +12,13 @@ import (
 
 func DealRelationAction(c *gin.Context, relation *io.ParamRealation, claim *jwt.MyClaims) (*io.Response, error) {
 	exits, _ := models.IsFans(c, claim.UserID, relation.ToUserID)
-	if relation.ActionType == 1 && !exits {
+	if relation.ActionType == common.Add && !exits {
 		//生成一个雪花id
 		relationID := snowflake.GenID()
 		r := models.Relation{RelationID: relationID, UserID: claim.UserID, ToUserID: relation.ToUserID}
 		status := models.InsertRelation(c, r)
 		return &io.Response{StatusCode: common.CodeSuccess, StatusMsg: "关注成功"}, status
-	} else if relation.ActionType == 2 && exits {
+	} else if relation.ActionType == common.Cancle && exits {
 		r := models.Relation{UserID: claim.UserID, ToUserID: relation.ToUserID}
 		status := models.DeleteRelation(c, r)
 		return &io.Response{StatusCode: common.CodeSuccess, StatusMsg: "取消关注成功"}, status
