@@ -15,6 +15,7 @@ import (
 func FeedHandler(c *gin.Context) {
 	lastTime := c.PostForm("last_time")
 	token := c.PostForm("token")
+	println("ddd ", token)
 	if lastTime == "" {
 		if token != "" {
 			_, err := jwt.ParseToken(token)
@@ -28,7 +29,7 @@ func FeedHandler(c *gin.Context) {
 		}
 		data, err := myredis.GetVideoList()
 		if err != nil {
-			data, err := tiktokdb.GetVideoListWithTime(c, time.Now())
+			data, err := tiktokdb.GetVideoListWithTime(c, time.Now(), token)
 			if err != nil {
 				io.ResponseError(c, common.CodeGetVideoListErr)
 			}
@@ -54,7 +55,7 @@ func FeedHandler(c *gin.Context) {
 			//io.ResponseSuccessVideoList(c,个性化推荐列表)
 		}
 		t, _ := time.ParseInLocation("2006-01-02 15:04:05", lastTime, time.Local)
-		data, err := tiktokdb.GetVideoListWithTime(c, t)
+		data, err := tiktokdb.GetVideoListWithTime(c, t, token)
 		if err != nil {
 			io.ResponseError(c, common.CodeGetVideoListErr)
 		}
