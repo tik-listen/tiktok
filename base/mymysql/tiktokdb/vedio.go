@@ -46,7 +46,7 @@ func CheckVideoExist(ctx *gin.Context, name string, userid int64) bool {
 // GetVideoListWithTime 获取某一时间之前的视频列表
 func GetVideoListWithTime(c *gin.Context, now time.Time) ([]Video, error) {
 	db := mymysql.GetDB(c)
-	token := c.PostForm("token")
+	token := c.GetHeader("token")
 	res := make([]Video, 0)
 	MyClaims, err := jwt.ParseToken(token)
 	if err != nil {

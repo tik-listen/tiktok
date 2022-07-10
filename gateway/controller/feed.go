@@ -2,19 +2,20 @@ package controller
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"tiktok/base/common"
 	"tiktok/base/io"
 	"tiktok/base/jwt"
 	"tiktok/base/mymysql/tiktokdb"
 	"tiktok/base/myredis"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 func FeedHandler(c *gin.Context) {
 	lastTime := c.PostForm("last_time")
-	token := c.PostForm("token")
+	token := c.GetHeader("token")
 	if lastTime == "" {
 		if token != "" {
 			_, err := jwt.ParseToken(token)
