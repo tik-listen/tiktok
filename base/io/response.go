@@ -176,6 +176,7 @@ func ResponseSuccessPublishList(c *gin.Context, videoList []tiktokdb.Video) {
 		res[i].Id = videoList[i].VideoId
 		res[i].User, _ = tiktokdb.GetOneUserWithId(c, videoList[i].UserId)
 		res[i].PlayUrl = "http://82.157.141.199/" + strconv.FormatInt(videoList[i].VideoId, 10) + ".mp4"
+
 		res[i].FavoriteCount = videoList[i].FavoriteCount
 		res[i].CommentCount = videoList[i].CommentCount
 		res[i].IsFavorite = videoList[i].IsFavorite
