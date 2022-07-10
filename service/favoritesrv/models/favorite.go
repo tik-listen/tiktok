@@ -49,6 +49,14 @@ func CountFavoriteWithEvido(ctx context.Context, videoID int64) (int64, error) {
 	return count, err
 }
 
+// 查询视频点赞用户列表
+func FindFavoriteByVideoID(ctx context.Context, videoID int64) ([]Favorite, error) {
+	db := mymysql.GetDB(ctx)
+	ret := make([]Favorite, 0)
+	err := db.Table("favorite").Where("video_id=?", videoID).Find(ret).Error
+	return ret, err
+}
+
 //查询用户点赞说数
 func CountFavoriteWithUser(ctx context.Context, userID int64) (int64, error) {
 	db := mymysql.GetDB(ctx)

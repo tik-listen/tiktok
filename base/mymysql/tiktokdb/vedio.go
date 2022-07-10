@@ -2,9 +2,13 @@ package tiktokdb
 
 import (
 	"errors"
-	"github.com/gin-gonic/gin"
+	"tiktok/base/jwt"
 	"tiktok/base/mymysql"
+	"tiktok/service/favoritesrv/models"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // Video vedio 在redis的格式 video+时间（到秒）的Set存储视频id
@@ -42,11 +46,31 @@ func CheckVideoExist(ctx *gin.Context, name string, userid int64) bool {
 // GetVideoListWithTime 获取某一时间之前的视频列表
 func GetVideoListWithTime(c *gin.Context, now time.Time) ([]Video, error) {
 	db := mymysql.GetDB(c)
-	var res []Video
-	err := db.Table("video").Where("date < ?", now.Unix()).Limit(10).Find(&res)
-	if err.Error != nil {
+	token := c.PostForm("token")
+	res := make([]Video, 0)
+	MyClaims, err := jwt.ParseToken(token)
+	if err != nil {
+		zap.L().Error("token is invalid", zap.Error(err))
+		return nil, err
+	}
+	userID := MyClaims.UserID
+	err = db.Table("video").Where("date < ?", now.Unix()).Limit(10).Find(&res).Error
+	if err != nil {
 		return nil, errors.New("MySQL ERR")
 	}
+	for idx, video := range res {
+		favoites, err := models.FindFavoriteByVideoID(c, video.VideoId)
+		if err != nil {
+			return nil, err
+		}
+		res[idx].FavoriteCount = int64(len(favoites))
+		for _, favoite := range favoites {
+			if favoite.UserID == userID {
+				res[idx].IsFavorite = true
+			}
+		}
+	}
+
 	return res, nil
 }
 
