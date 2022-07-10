@@ -70,11 +70,11 @@ func GetVideoListWithTime(c *gin.Context, now time.Time, token string) ([]Video,
 		}
 	}
 	for idx, video := range res {
-		count, err := GetCommentCount(c, video.VideoId)
+		comments, err := FindCommentList(c, video.VideoId)
 		if err != nil {
 			return nil, err
 		}
-		res[idx].CommentCount = count
+		res[idx].CommentCount = int64(len(comments))
 	}
 
 	return res, nil

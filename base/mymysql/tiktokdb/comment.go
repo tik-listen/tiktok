@@ -57,6 +57,8 @@ func FindCommentList(c *gin.Context, vid int64) (clist []Comment, err error) {
 // GetCommentCount 查询视频的评论数
 func GetCommentCount(c *gin.Context, vid int64) (count int64, err error) {
 	db := mymysql.GetDB(c)
-	err = db.Table("comments").Where("video_id=?", vid).Count(&count).Error
+	ret := make([]Comment, 0)
+	err = db.Table("comments").Where("video_id=?", vid).Find(&ret).Error
+	count = int64(len(ret))
 	return
 }

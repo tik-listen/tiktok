@@ -151,7 +151,7 @@ func ResponseSuccessVideoList(c *gin.Context, videoList []tiktokdb.Video) {
 		res[i].User, _ = tiktokdb.GetOneUserWithId(c, videoList[i].UserId)
 		res[i].PlayUrl = "http://82.157.141.199/" + strconv.FormatInt(videoList[i].VideoId, 10) + ".mp4"
 		res[i].FavoriteCount = videoList[i].FavoriteCount
-		res[i].CommentCount = videoList[i].FavoriteCount
+		res[i].CommentCount = videoList[i].CommentCount
 		res[i].IsFavorite = videoList[i].IsFavorite
 		res[i].Name = videoList[i].Name
 		if videoList[i].Date > time {
