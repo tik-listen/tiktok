@@ -53,7 +53,7 @@ func CountFavoriteWithEvido(ctx context.Context, videoID int64) (int64, error) {
 func FindFavoriteByVideoID(ctx context.Context, videoID int64) ([]Favorite, error) {
 	db := mymysql.GetDB(ctx)
 	ret := make([]Favorite, 0)
-	err := db.Table("favorite").Where("video_id=?", videoID).Find(ret).Error
+	err := db.Table("favorite").Where("video_id=?", videoID).Find(&ret).Error
 	return ret, err
 }
 
