@@ -15,7 +15,8 @@ import (
 
 func FeedHandler(c *gin.Context) {
 	lastTime := c.PostForm("last_time")
-	token := c.GetHeader("token")
+	token := c.Query("token")
+	println("dddd ", token)
 	if lastTime == "" {
 		if token != "" {
 			_, err := jwt.ParseToken(token)

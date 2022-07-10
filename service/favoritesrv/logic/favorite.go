@@ -19,7 +19,7 @@ func DealLikeAction(ctx context.Context, p *io.LikeActionReq) (*io.Response, err
 	favorite := models.Favorite{UserID: userID, VideoID: p.VideoID}
 	exites := models.IsFavorite(ctx, favorite)
 	//点赞并且不存在
-	//println(p.ActionType, exites)
+	println(p.ActionType, exites)
 	if p.ActionType == common.Add && !exites {
 
 		err := models.InsertFavorite(ctx, favorite)

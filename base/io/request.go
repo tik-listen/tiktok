@@ -33,7 +33,7 @@ type UserInfoReq struct {
 type LikeActionReq struct {
 	Token      string        `form:"token" binding:"required"`
 	VideoID    int64         `form:"video_id" binding:"required"`
-	ActionType common.Action `form:"action_type" binding:"required,oneof=0 1"`
+	ActionType common.Action `form:"action_type" binding:"required,oneof=1 2"`
 }
 
 // ParamComment 评论相关参数
