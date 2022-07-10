@@ -47,8 +47,16 @@ func GetUIDbyCID(c *gin.Context, cid int64) (uid int64, err error) {
 	uid = comment.UserID
 	return
 }
+
 func FindCommentList(c *gin.Context, vid int64) (clist []Comment, err error) {
 	db := mymysql.GetDB(c)
 	err = db.Table("comments").Where("video_id=?", vid).Find(&clist).Error
 	return clist, err
+}
+
+// GetCommentCount 查询视频的评论数
+func GetCommentCount(c *gin.Context, vid int64) (count int64, err error) {
+	db := mymysql.GetDB(c)
+	err = db.Table("comments").Where("video_id=?", vid).Count(&count).Error
+	return
 }
